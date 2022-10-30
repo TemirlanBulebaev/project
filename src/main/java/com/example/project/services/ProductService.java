@@ -2,19 +2,26 @@ package com.example.project.services;
 
 import com.example.project.entities.ProductEntity;
 import com.example.project.entities.UserEntity;
+import com.example.project.exceptions.ProductNotFoundException;
+import com.example.project.exceptions.ProductsNotFoundException;
 import com.example.project.models.Product;
 import com.example.project.repositories.ProductRepository;
 import com.example.project.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service// Является компонентом
+@RequiredArgsConstructor
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
     private UserRepository userRepository;
+
 
     public Product addNewProduct(ProductEntity product, Long userId) {
         UserEntity user = userRepository.findById(userId).get();
@@ -22,9 +29,32 @@ public class ProductService {
         return Product.toModel(productRepository.save(product));
     }
 
-    public Product isForSale(Long id) {
-        ProductEntity product = productRepository.findById(id).get();
-        product.setForSale(!product.getForSale());
-        return Product.toModel(productRepository.save(product));
+    public Product getProductInfo(Long id) throws ProductNotFoundException {
+        ProductEntity product;
+        if (productRepository.findById(id).isPresent()) {
+            product = productRepository.findById(id).get();
+        } else {
+            throw new ProductNotFoundException("Товар не найден!");
+        }
+        return Product.toModel(product);
     }
+
+    public List<Product> getAllProducts() throws ProductsNotFoundException {
+        List<ProductEntity> products = productRepository.findAll();
+        if (!products.isEmpty()) {
+            return products.stream().map(Product::toModel).collect(Collectors.toList());
+        } else {
+            throw new ProductsNotFoundException("Товаров нет!");
+        }
+    }
+
+    public Long deleteProducts(Long id) {
+        productRepository.deleteById(id);
+        return id;
+    }
+//    public Product isForSale(Long id) {
+//        ProductEntity product = productRepository.findById(id).get();
+//        product.setForSale(!product.getForSale());
+//        return Product.toModel(productRepository.save(product));
+//    }
 }

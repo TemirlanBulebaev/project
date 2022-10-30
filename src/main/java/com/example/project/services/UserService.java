@@ -6,7 +6,6 @@ import com.example.project.exceptions.UserNotFoundException;
 import com.example.project.models.User;
 import com.example.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,8 +15,8 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserEntity registration(UserEntity user) throws UserAlreadyExistException {
-        if(userRepository.findByUsername(user.getUsername()) != null) {
-            throw new UserAlreadyExistException("Пользователь с таким именем уже существует!");
+        if(userRepository.findByEmail(user.getEmail()) != null) {
+            throw new UserAlreadyExistException("Пользователь с такой почтой уже существует!");
         }
         return userRepository.save(user);
     }

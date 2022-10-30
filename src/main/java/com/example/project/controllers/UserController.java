@@ -3,20 +3,19 @@ package com.example.project.controllers;
 import com.example.project.entities.UserEntity;
 import com.example.project.exceptions.UserAlreadyExistException;
 import com.example.project.exceptions.UserNotFoundException;
-import com.example.project.repositories.UserRepository;
 import com.example.project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping
+    @PostMapping("/registration")
     public ResponseEntity registration(@RequestBody UserEntity user) {
         try{
             userService.registration(user);
@@ -29,7 +28,7 @@ public class UserController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/info")
     public ResponseEntity getOneUser(@RequestParam Long id) {
         try{
             return ResponseEntity.ok(userService.getOne(id));
@@ -40,7 +39,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id){
         try {
             return ResponseEntity.ok(userService.delete(id));

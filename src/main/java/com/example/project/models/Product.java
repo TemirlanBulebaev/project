@@ -1,52 +1,37 @@
 package com.example.project.models;
 
 import com.example.project.entities.ProductEntity;
+import com.example.project.entities.UserEntity;
+import com.example.project.repositories.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     private Long id;
     private String title;
+    private String description;
     private Integer price;
+    private String city;
+    private String author;
+    private LocalDateTime dateOfCreated;
 
     public static Product toModel(ProductEntity entity) {
         Product model = new Product();
         model.setId(entity.getId());
         model.setTitle(entity.getTitle());
+        model.setDescription(entity.getDescription());
         model.setPrice(entity.getPrice());
+        model.setAuthor(entity.getUser().getUsername());
+        model.setCity(entity.getCity());
+        model.setDateOfCreated(entity.getDateOfCreated());
         return model;
-    }
-    public Product() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", price=" + price +
-                '}';
     }
 }
