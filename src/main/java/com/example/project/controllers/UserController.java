@@ -4,16 +4,15 @@ import com.example.project.entities.UserEntity;
 import com.example.project.exceptions.UserAlreadyExistException;
 import com.example.project.exceptions.UserNotFoundException;
 import com.example.project.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/registration")
     public ResponseEntity registration(@RequestBody UserEntity user) {

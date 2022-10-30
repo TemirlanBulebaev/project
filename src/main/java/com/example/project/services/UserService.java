@@ -5,14 +5,15 @@ import com.example.project.exceptions.UserAlreadyExistException;
 import com.example.project.exceptions.UserNotFoundException;
 import com.example.project.models.User;
 import com.example.project.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserEntity registration(UserEntity user) throws UserAlreadyExistException {
         if(userRepository.findByEmail(user.getEmail()) != null) {

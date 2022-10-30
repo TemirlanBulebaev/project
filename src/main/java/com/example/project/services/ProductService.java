@@ -2,15 +2,16 @@ package com.example.project.services;
 
 import com.example.project.entities.ProductEntity;
 import com.example.project.entities.UserEntity;
+import com.example.project.exceptions.NoEditProductException;
 import com.example.project.exceptions.ProductNotFoundException;
 import com.example.project.exceptions.ProductsNotFoundException;
 import com.example.project.models.Product;
 import com.example.project.repositories.ProductRepository;
 import com.example.project.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
     public Product addNewProduct(ProductEntity product, Long userId) {
@@ -52,9 +51,16 @@ public class ProductService {
         productRepository.deleteById(id);
         return id;
     }
-//    public Product isForSale(Long id) {
-//        ProductEntity product = productRepository.findById(id).get();
-//        product.setForSale(!product.getForSale());
-//        return Product.toModel(productRepository.save(product));
-//    }
+
+    public Product editProduct(ProductEntity editProduct, Long id){
+        ProductEntity product = productRepository.findById(id).get();
+        product.setTitle(editProduct.getTitle());
+        product.setDescription(editProduct.getDescription());
+        product.setPrice(editProduct.getPrice());
+        product.setCity(editProduct.getCity());
+        product.setDateOfCreated(LocalDateTime.now());
+        productRepository.save(product);
+        return Product.toModel(product);
+        }
 }
+

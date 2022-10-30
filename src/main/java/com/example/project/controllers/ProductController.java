@@ -1,6 +1,7 @@
 package com.example.project.controllers;
 
 import com.example.project.entities.ProductEntity;
+import com.example.project.exceptions.NoEditProductException;
 import com.example.project.exceptions.ProductNotFoundException;
 import com.example.project.exceptions.ProductsNotFoundException;
 import com.example.project.services.ProductService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor // Заменяет создание конструктора
 public class ProductController {
     private final ProductService productService;//При создании бина, он будет сразу инжектиться
+
     @PostMapping("/create")
     public ResponseEntity addProduct(@RequestBody ProductEntity product,
                                      @RequestParam Long userId) {
@@ -35,7 +37,7 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity getAllProducts(){
+    public ResponseEntity getAllProducts() {
         try {
             return ResponseEntity.ok(productService.getAllProducts());
         } catch (ProductsNotFoundException e) {
@@ -55,12 +57,14 @@ public class ProductController {
     }
 
 
-//    @PutMapping
-//    public ResponseEntity isForSaleProduct(@RequestParam Long id) {
-//        try {
-//            return ResponseEntity.ok(productService.isForSale(id));
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body("Произошла ошибка");
-//        }
-//    }
+    @PutMapping("/edit/{id}")
+    public ResponseEntity editProduct(@RequestBody ProductEntity editProduct,
+                                      @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(productService.editProduct(editProduct, id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Произошла ошибка");
+        }
+    }
 }
+
