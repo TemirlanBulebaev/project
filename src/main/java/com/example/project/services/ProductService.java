@@ -58,7 +58,7 @@ public class ProductService {
         product.setDescription(editProduct.getDescription());
         product.setPrice(editProduct.getPrice());
         product.setCity(editProduct.getCity());
-        product.setDateOfCreated(LocalDateTime.now());
+        product.setDate(LocalDateTime.now());
         productRepository.save(product);
         return Product.toModel(product);
         }

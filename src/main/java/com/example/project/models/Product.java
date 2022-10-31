@@ -21,7 +21,7 @@ public class Product {
     private Integer price;
     private String city;
     private String author;
-    private LocalDateTime dateOfCreated;
+    private LocalDateTime date;
 
     public static Product toModel(ProductEntity entity) {
         Product model = new Product();
@@ -31,7 +31,7 @@ public class Product {
         model.setPrice(entity.getPrice());
         model.setAuthor(entity.getUser().getUsername());
         model.setCity(entity.getCity());
-        model.setDateOfCreated(entity.getDateOfCreated());
+        model.setDate(entity.getDate());
         return model;
     }
 }

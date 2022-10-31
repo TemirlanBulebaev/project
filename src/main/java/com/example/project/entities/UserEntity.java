@@ -29,7 +29,7 @@ public class UserEntity {
     @Column(name = "active")
     private boolean active;
 
-
+    
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "user")
     private List<ProductEntity> products;
 

@@ -6,7 +6,6 @@ import com.example.project.exceptions.UserNotFoundException;
 import com.example.project.models.User;
 import com.example.project.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,5 +34,16 @@ public class UserService {
     public Long delete(Long id) {
         userRepository.deleteById(id);
         return id;
+    }
+
+    public User editUser(UserEntity editUser, Long id) {
+        UserEntity user = userRepository.findById(id).get();
+        user.setUsername(editUser.getUsername());
+        user.setEmail(editUser.getEmail());
+        user.setPhoneNumber(editUser.getPhoneNumber());
+        user.setPassword(editUser.getPassword());
+        user.setActive(editUser.isActive());
+        userRepository.save(user);
+        return User.toModel(user);
     }
 }

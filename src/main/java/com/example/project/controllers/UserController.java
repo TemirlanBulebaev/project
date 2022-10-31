@@ -38,6 +38,16 @@ public class UserController {
         }
     }
 
+    @PutMapping("/edit/{id}")
+    public ResponseEntity editUser(@RequestBody UserEntity editUser,
+                                   @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(userService.editUser(editUser, id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Произошла ошибка");
+        }
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id){
         try {

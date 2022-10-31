@@ -30,11 +30,11 @@ public class ProductEntity {
     private UserEntity user;
 
     @Column(name = "data_of_created")
-    private LocalDateTime dateOfCreated;
+    private LocalDateTime date;
 
     @PrePersist // Инициализация бина
     private void init() {
-        dateOfCreated = LocalDateTime.now();
+        date = LocalDateTime.now();
     }
 
 
