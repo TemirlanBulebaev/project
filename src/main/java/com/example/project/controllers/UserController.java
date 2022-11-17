@@ -1,23 +1,25 @@
 package com.example.project.controllers;
 
-import com.example.project.entities.UserEntity;
+import com.example.project.entities.User;
 import com.example.project.exceptions.UserAlreadyExistException;
 import com.example.project.exceptions.UserNotFoundException;
+import com.example.project.models.UserResponse;
+import com.example.project.payload.UserRequest;
 import com.example.project.services.UserService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-@RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/registration")
-    public ResponseEntity registration(@RequestBody UserEntity user) {
-        try{
-            userService.registration(user);
+    public ResponseEntity registration(@RequestBody UserRequest request) {
+        try {
+            userService.registration(request);
             return ResponseEntity.ok("Пользователь успешно сохранен!");
         } catch (UserAlreadyExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -27,10 +29,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/info")
-    public ResponseEntity getOneUser(@RequestParam Long id) {
-        try{
-            return ResponseEntity.ok(userService.getOne(id));
+    @GetMapping("/{id}/info")
+    public ResponseEntity getUser(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(userService.getUser(id));
         } catch (UserNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -38,8 +40,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity editUser(@RequestBody UserEntity editUser,
+    @PutMapping("/{id}/edit")
+    public ResponseEntity editUser(@RequestBody UserResponse editUser,
                                    @PathVariable Long id) {
         try {
             return ResponseEntity.ok(userService.editUser(editUser, id));
@@ -48,8 +50,8 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteUser(@PathVariable Long id){
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity deleteUser(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(userService.delete(id));
         } catch (Exception e) {
