@@ -1,4 +1,4 @@
-package com.example.project.models;
+package com.example.project.dto;
 
 import com.example.project.entities.User;
 
@@ -15,15 +15,15 @@ public class UserResponse {
     private boolean active;
     private List<ProductResponse> products;
 
-    public static UserResponse toModel(User user) {
-        UserResponse model = new UserResponse();
-        model.setUsername(user.getUsername());
-        model.setEmail(user.getEmail());
-        model.setPhoneNumber(user.getPhoneNumber());
-        model.setActive(user.isActive());
-        model.setProducts(user.getProducts().stream().map(ProductResponse::toModel).collect(Collectors.toList()));
-        return model;
-    }
+//    public static UserResponse toModel(User user) {
+//        UserResponse model = new UserResponse();
+//        model.setUsername(user.getUsername());
+//        model.setEmail(user.getEmail());
+//        model.setPhoneNumber(user.getPhoneNumber());
+//        model.setActive(user.isActive());
+//        model.setProducts(user.getProducts().stream().map(ProductResponse::toModel).collect(Collectors.toList()));
+//        return model;
+//    }
 
     public UserResponse() {
     }

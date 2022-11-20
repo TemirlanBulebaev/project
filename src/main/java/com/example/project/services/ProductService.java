@@ -4,7 +4,7 @@ import com.example.project.entities.Product;
 import com.example.project.entities.User;
 import com.example.project.exceptions.ProductNotFoundException;
 import com.example.project.exceptions.ProductsNotFoundException;
-import com.example.project.models.ProductResponse;
+import com.example.project.dto.ProductResponse;
 import com.example.project.payload.ProductRequest;
 import com.example.project.repositories.ProductRepository;
 import com.example.project.repositories.UserRepository;

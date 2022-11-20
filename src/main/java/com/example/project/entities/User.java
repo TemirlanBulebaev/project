@@ -1,44 +1,89 @@
 package com.example.project.entities;
 
+import com.example.project.entities.audit.DateAudit;
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@Entity
-@Table(name = "users")
-public class User {
+@Entity(name = "USER")
+public class User extends DateAudit {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", allocationSize = 1)
     private Long id;
-    @Column(name = "email")
+
+    @NaturalId
+    @Column(name = "EMAIL", unique = true)
+    //@NotBlank(message = "User email cannot be null")
     private String email;
-    @Column(name = "phoneNumber")
-    private String phoneNumber;
-    @Column(name = "username")
+
+    @Column(name = "USERNAME", unique = true)
+    //@NullOrNotBlank(message = "Username can not be blank")
     private String username;
-    @Column(name = "password")
+
+    @Column(name = "PASSWORD")
+    //@NotNull(message = "Password cannot be null")
     private String password;
-    @Column(name = "active")
-    private boolean active;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
-    private List<Product> products;
+    @Column(name = "FIRST_NAME")
+    //@NullOrNotBlank(message = "First name can not be blank")
+    private String firstName;
 
-    @Column(name = "date_of_created")
-    private LocalDateTime dateOfCreated;
+    @Column(name = "LAST_NAME")
+    //@NullOrNotBlank(message = "Last name can not be blank")
+    private String lastName;
+
+    @Column(name = "IS_ACTIVE", nullable = false)
+    private Boolean active;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "USER_AUTHORITY",
+            joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID") },
+            inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID") })
+    private Set<Role> roles = new HashSet<>();
+
+    @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
+    private Boolean isEmailVerified;
 
     public User() {
-
+        super();
     }
 
-    public User(String email, String phoneNumber, String username, String password, LocalDateTime dateOfCreated) {
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.username = username;
-        this.password = password;
-        this.active = true;
-        this.dateOfCreated = dateOfCreated;
+    public User(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.active = user.getActive();
+        this.roles = user.getRoles();
+        this.isEmailVerified = user.isEmailVerified;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+        role.getUserList().add(this);
+    }
+
+    public void addRoles(Set<Role> roles) {
+        roles.forEach(this::addRole);
+    }
+
+    public void removeRole(Role role) {
+        roles.remove(role);
+        role.getUserList().remove(this);
+    }
+
+    public void verificationConfirmed() {
+        setIsEmailVerified(true);
+    }
+    public void markVerificationConfirmed() {
+        setIsEmailVerified(true);
     }
 
     public Long getId() {
@@ -47,22 +92,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getUsername() {
@@ -81,41 +110,61 @@ public class User {
         this.password = password;
     }
 
-    public boolean isActive() {
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public Set<Role> getRoles() {
+        return this.roles;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setRoles(Set<Role> authorities) {
+        roles = authorities;
     }
 
-    public LocalDateTime getDateOfCreated() {
-        return dateOfCreated;
+    public Boolean getIsEmailVerified() {
+        return isEmailVerified;
     }
 
-    public void setDateOfCreated(LocalDateTime dateOfCreated) {
-        this.dateOfCreated = dateOfCreated;
+    public void setIsEmailVerified(Boolean emailVerified) {
+        this.isEmailVerified = isEmailVerified;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", active=" + active +
-                ", products=" + products +
-                ", dateOfCreated=" + dateOfCreated +
-                '}';
+        return "User{" + "id=" + id + ", email='" + email + '\'' + ", username='" + username + '\'' + ", password='"
+                + password + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", active="
+                + active + ", roles=" + roles + ", isEmailVerified=" + isEmailVerified + '}';
     }
+
+
 }
+

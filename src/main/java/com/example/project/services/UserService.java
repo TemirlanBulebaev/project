@@ -1,57 +1,81 @@
 package com.example.project.services;
 
+import com.example.project.entities.Role;
 import com.example.project.entities.User;
-import com.example.project.exceptions.UserAlreadyExistException;
-import com.example.project.exceptions.UserNotFoundException;
-import com.example.project.models.UserResponse;
-import com.example.project.payload.UserRequest;
+import com.example.project.payload.RegistrationRequest;
 import com.example.project.repositories.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 @Service
 public class UserService {
+
+    private static final Logger logger = LogManager.getLogger(UserService.class); //Логер
+    private final UserRepository userRepository;
+    private final RoleService roleService;
+    //private final PasswordEncoder passwordEncoder;
+    
+    //
+    //private final UserDeviceService userDeviceService;
+    //private final RefreshTokenService refreshTokenService;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(
+            UserRepository userRepository,
+            RoleService roleService
+    ) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
+    }
 
-    public User registration(UserRequest request) throws UserAlreadyExistException {
-        if(userRepository.findByEmail(request.getEmail()) != null) {
-            throw new UserAlreadyExistException("Пользователь с такой почтой уже существует!");
+
+    public Optional<User> addNewUser(RegistrationRequest registrationRequest) {
+        User newUser = new User(); //Создаем нового пользователя
+        Boolean isAdmin = registrationRequest.getRegistrationAsAdmin();// Проверяем админ ли  это
+        newUser.setEmail(registrationRequest.getEmail()); // устанавливаем почту
+        newUser.setUsername(registrationRequest.getUsername()); // устнавливаем имя
+        newUser.addRoles(getRoles(isAdmin));
+        newUser.setActive(true);
+        newUser.setIsEmailVerified(false);
+        return Optional.of(newUser);
+    }
+
+    /**
+     * Проверка может ли быть новый пользователь админом
+     */
+    private Set<Role> getRoles(Boolean isAdmin) {
+        Set<Role> roles = new HashSet<>(roleService.findAll());
+        if (!isAdmin) {
+            roles.removeIf(Role::isAdminRole);
         }
-        User user = new User (
-                request.getEmail(),
-                request.getPhoneNumber(),
-                request.getUsername(),
-                request.getPassword(),
-                request.getDateOfCreated()
-        );
+        return roles;
+    }
 
+    /**
+     * Сохранение пользователя
+     */
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    public UserResponse getUser(Long id) throws UserNotFoundException {
-        User user;
-        if (userRepository.findById(id).isPresent()){
-            user = userRepository.findById(id).get();
-        } else {
-            throw new UserNotFoundException("Пользователь не найден!");
-        }
-        return UserResponse.toModel(user);
+    /**
+     * Существует ли такая почта
+     */
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
-
-    public Long delete(Long id) {
-        userRepository.deleteById(id);
-        return id;
-    }
-
-    public UserResponse editUser(UserResponse editUser, Long id) {
-        User user = userRepository.findById(id).get();
-        user.setUsername(editUser.getUsername());
-        user.setEmail(editUser.getEmail());
-        user.setPhoneNumber(editUser.getPhoneNumber());
-        user.setPassword(editUser.getPassword());
-        user.setActive(editUser.isActive());
-        userRepository.save(user);
-        return UserResponse.toModel(user);
+    /**
+     * Существует ли такое имя пользователя
+     */
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }
+
+ 
