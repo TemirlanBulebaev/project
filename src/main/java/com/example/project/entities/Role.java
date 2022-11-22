@@ -33,7 +33,7 @@ public class Role {
     }
 
     public boolean isAdminRole() {
-        return null != this && this.role.equals(RoleName.ROLE_ADMIN);
+        return this.role.equals(RoleName.ROLE_ADMIN);
     }
 
     public Long getId() {

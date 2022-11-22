@@ -114,8 +114,8 @@ public class AuthService {
     /**
      * Вход по почте, паролю и устройству
      */
-    public Optional<Authentication> authenticateUser(LoginRequest loginRequestDto) {
-        UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+    public Optional<Authentication> authenticateUser(LoginRequest loginRequest) {
+        UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
         return Optional.ofNullable(authenticationManager.authenticate(user));
     }
 

@@ -48,8 +48,7 @@ public class AuthController {
      * (Опубликовать событие для создания токена подверждения электронной почты)
      * registerAsAdmin": "true" - зарегистрировать администратором
      */ //TODO доделать поля, информация в коментах
-    @PostMapping("/registration")
-    public ResponseEntity registrationUser(@RequestBody RegistrationRequest registrationRequest) {
+    @PostMapping("/registration")    public ResponseEntity registrationUser(@RequestBody RegistrationRequest registrationRequest) {
         //??? Вернем сохраненного пользователя из функции и применим все что находится в мапе???
         return authService.registrationUser(registrationRequest)
                 .map(savedNewUser -> {
@@ -64,7 +63,7 @@ public class AuthController {
                     logger.info("Пользователь зарегистрировался: " + savedNewUser.getUsername());
                     return ResponseEntity.ok(new ApiResponse(true, "Для завершения регистрации перейдите по ссылке в письме"));
                 //??? Нужно ли бросать эту ошибку если мы в сервисе бросаем такую же?
-                }).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Пользователь с такой почтой уже существует"));//Произошла ошибка сохранения в базу?
+                }).orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Пользователь с такой почтой уже существует"));//Не получилось отправить уведомление о регистрации
     }
 
     /**
@@ -72,7 +71,7 @@ public class AuthController {
      */
     @GetMapping("/registration/сonfirmation")
     //@ApiOperation(value = "Подтверждение учетной записи")
-    public ResponseEntity confirmRegistration(@RequestParam("token") String token) {
+    public ResponseEntity confirmRegistration(@RequestParam("token") String token) {//
 
         return authService.confirmEmailRegistration(token)
                 .map(user -> ResponseEntity.ok(new ApiResponse(true, "Учётная запись подтверждена")))
@@ -89,9 +88,9 @@ public class AuthController {
         Authentication authentication = authService.authenticateUser(loginRequest)
                 .orElseThrow(() -> new UserLoginException("аутентификации", loginRequest.getEmail()));
 
-        JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+        JwtUser jwtUser = (JwtUser) authentication.getPrincipal();//Привести к типу
         logger.info("Вход в систему  " + jwtUser.getUsername());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);// getContext() - задает контекст подсовывает токен
 
         return authService.createAndPersistRefreshTokenForDevice(authentication, loginRequest)
                 .map(RefreshToken::getToken)
