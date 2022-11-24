@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping("/auth/")
+@RequestMapping("/auth")
 public class AuthController {
     private static final Logger logger = LogManager.getLogger(AuthController.class);
     private final AuthService authService;
@@ -47,8 +49,8 @@ public class AuthController {
      * Регистрация пользователя
      * (Опубликовать событие для создания токена подверждения электронной почты)
      * registerAsAdmin": "true" - зарегистрировать администратором
-     */ //TODO доделать поля, информация в коментах
-    @PostMapping("/registration")    public ResponseEntity registrationUser(@RequestBody RegistrationRequest registrationRequest) {
+     */
+    @PostMapping("/registration")    public ResponseEntity registrationUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
         //??? Вернем сохраненного пользователя из функции и применим все что находится в мапе???
         return authService.registrationUser(registrationRequest)
                 .map(savedNewUser -> {
@@ -69,7 +71,7 @@ public class AuthController {
     /**
      * Подтверждение учетной записи
      */
-    @GetMapping("/registration/сonfirmation")
+    @GetMapping("/registrationConfirmation")
     //@ApiOperation(value = "Подтверждение учетной записи")
     public ResponseEntity confirmRegistration(@RequestParam("token") String token) {//
 

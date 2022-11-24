@@ -1,23 +1,28 @@
 package com.example.project.entities.audit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.Instant;
 
 // позволяет вынести общие поля в родительский класс, но при этом не создавать для него отдельную таблицу
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"create", "update"}, allowGetters = true)
 public abstract class DateAudit implements Serializable {
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "date_of_created")
     private Instant dateOfCreated;
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(name = "date_of_updated")
     private Instant dateOfUpdated;
 
 

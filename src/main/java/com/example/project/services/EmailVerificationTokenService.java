@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 public class EmailVerificationTokenService {
-    private static final Logger logger = LogManager.getLogger(EmailVerificationTokenService.class);
-    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 
+    private static final Logger logger = LogManager.getLogger(EmailVerificationTokenService.class);
+
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     @Value("${jwt.token.expired}")
     private Long tokenExpired;
 
@@ -27,20 +29,14 @@ public class EmailVerificationTokenService {
         this.emailVerificationTokenRepository = emailVerificationTokenRepository;
     }
 
-    public void createVerificationToken(User user, String token) {
+    public void createVirficationToken(User user, String token) {
         EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
         emailVerificationToken.setToken(token);
         emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);
         emailVerificationToken.setUser(user);
-        emailVerificationToken.setExpiryDate(Instant.now().plusMillis(tokenExpired));//Токен истек
+        emailVerificationToken.setExpiryDate(Instant.now().plusMillis(tokenExpired));
         logger.info("Generated Email verification token :" );
         emailVerificationTokenRepository.save(emailVerificationToken);
-    }
-
-
-    public EmailVerificationToken findByToken(String token) {
-        return emailVerificationTokenRepository.findByToken(token)
-                .orElseThrow(() -> new ResourceNotFoundException("EmailVerificationToken", "token", token));
     }
 
     public void verifyExpiration(EmailVerificationToken verificationToken) {
@@ -52,7 +48,17 @@ public class EmailVerificationTokenService {
         }
     }
 
+    public String createNewToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    public EmailVerificationToken findByToken(String token) {
+        return emailVerificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResourceNotFoundException("EmailVerificationToken", "token", token));
+    }
+
     public EmailVerificationToken save (EmailVerificationToken verificationToken) {
         return emailVerificationTokenRepository.save(verificationToken);
     }
+
 }

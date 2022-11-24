@@ -46,7 +46,7 @@ public class User extends DateAudit {
             inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID") })
     private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
+    @Column(name = "IS_EMAIL_VERIFIED", updatable = false,  nullable = false)
     private Boolean isEmailVerified;
 
     public User() {
@@ -154,7 +154,7 @@ public class User extends DateAudit {
         return isEmailVerified;
     }
 
-    public void setIsEmailVerified(Boolean emailVerified) {
+    public void setIsEmailVerified(Boolean isEmailVerified) {
         this.isEmailVerified = isEmailVerified;
     }
 
