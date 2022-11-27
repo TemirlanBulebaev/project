@@ -2,6 +2,8 @@ package com.example.project.payload;
 
 import com.example.project.entities.DeviceInfo;
 
+import javax.validation.Valid;
+
 public class LoginRequest {
 
     //@NotBlank(message = "Login Email cannot be blank")
@@ -16,6 +18,7 @@ public class LoginRequest {
    // @NotNull(message = "Device info cannot be null")
     //@ApiModelProperty(value = "Информация об устройстве", required = true, dataType = "object", allowableValues = "A valid " +
            // "deviceInfo object")
+    @Valid
     private DeviceInfo deviceInfo;
 
     public LoginRequest() {

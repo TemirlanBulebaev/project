@@ -1,13 +1,13 @@
 package com.example.project.entities;
 
 import com.example.project.entities.audit.DateAudit;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "USER")
+@Entity
+@Table(name = "USER")
 public class User extends DateAudit {
 
     @Id
@@ -16,7 +16,6 @@ public class User extends DateAudit {
     @SequenceGenerator(name = "user_seq", allocationSize = 1)
     private Long id;
 
-    @NaturalId
     @Column(name = "EMAIL", unique = true)
     //@NotBlank(message = "User email cannot be null")
     private String email;
@@ -29,24 +28,16 @@ public class User extends DateAudit {
     //@NotNull(message = "Password cannot be null")
     private String password;
 
-    @Column(name = "FIRST_NAME")
-    //@NullOrNotBlank(message = "First name can not be blank")
-    private String firstName;
-
-    @Column(name = "LAST_NAME")
-    //@NullOrNotBlank(message = "Last name can not be blank")
-    private String lastName;
-
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean active;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "USER_AUTHORITY",
             joinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID") },
             inverseJoinColumns = { @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID") })
     private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "IS_EMAIL_VERIFIED", updatable = false,  nullable = false)
+    @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
     private Boolean isEmailVerified;
 
     public User() {
@@ -54,20 +45,34 @@ public class User extends DateAudit {
     }
 
     public User(User user) {
-        this.id = user.getId();
-        this.username = user.getUsername();
-        this.password = user.getPassword();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.active = user.getActive();
-        this.roles = user.getRoles();
+        this.id = user.id;
+        this.username = user.username;
+        this.email = user.email;
+        this.password = user.password;
+        this.active = user.active;
         this.isEmailVerified = user.isEmailVerified;
+        this.roles = user.roles;
+    }
+    public User(Long id,
+                String username,
+                String email,
+                String password,
+                Boolean active,
+                Boolean isEmailVerified,
+                Set<Role> roles
+               ) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.active = active;
+        this.isEmailVerified = isEmailVerified;
+        this.roles = roles;
     }
 
     public void addRole(Role role) {
-        roles.add(role);
-        role.getUserList().add(this);
+        this.roles.add(role);
+        role.getUsers().add(this);
     }
 
     public void addRoles(Set<Role> roles) {
@@ -76,11 +81,11 @@ public class User extends DateAudit {
 
     public void removeRole(Role role) {
         roles.remove(role);
-        role.getUserList().remove(this);
+        role.getUsers().remove(this);
     }
 
     public void verificationConfirmed() {
-        setIsEmailVerified(true);
+        this.isEmailVerified = true;
     }
     public void markVerificationConfirmed() {
         setIsEmailVerified(true);
@@ -110,21 +115,6 @@ public class User extends DateAudit {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getEmail() {
         return email;
@@ -160,11 +150,15 @@ public class User extends DateAudit {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", email='" + email + '\'' + ", username='" + username + '\'' + ", password='"
-                + password + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", active="
-                + active + ", roles=" + roles + ", isEmailVerified=" + isEmailVerified + '}';
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", active=" + active +
+                ", roles=" + roles +
+                ", isEmailVerified=" + isEmailVerified +
+                '}';
     }
-
-
 }
 

@@ -10,7 +10,7 @@ public class MailSendException extends RuntimeException {
     private final String message;
 
     public MailSendException(String email, String message) {
-        super(String.format("Error sending [%s] for user [%s]", message, email));
+        super(String.format("Ошибка отправки [%s] для пользователя [%s]", message, email));
         this.email = email;
         this.message = message;
     }

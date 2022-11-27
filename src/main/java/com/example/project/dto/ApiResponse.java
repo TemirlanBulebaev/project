@@ -8,11 +8,11 @@ import java.time.Instant;
 
 public class ApiResponse {
 
-    private final String data;
+    private final String data;//Данные
     private final Boolean success;//Успех
-    private final String timestamp;//отметка времени
-    private final String cause;//причина
-    private final String path;//путь
+    private final String timestamp;//Отметка времени
+    private final String cause;//Причина
+    private final String path;//Путь
 
     public ApiResponse(Boolean success, String data, String cause, String path) {
         this.timestamp = Instant.now().toString();

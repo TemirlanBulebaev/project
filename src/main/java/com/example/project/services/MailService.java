@@ -28,15 +28,15 @@ public class MailService {
     }
 
     /**
-     * Отправка сообщения с подтверждением
+     * Подтверждение отправкии сообщения
      */
     public void sendMessageVerification (String emailTo, String emailConfirmationUrl) throws MessagingException {
 
-        Mail mailMessage = new Mail();
-        mailMessage.setFrom(username);
-        mailMessage.setTo(emailTo);
+        Mail mailMessage = new Mail();//Создаем новый майл
+        mailMessage.setFrom(username);//Передаем от кого будет сообщение
+        mailMessage.setTo(emailTo);//кому
         mailMessage.setSubject("Email Verification ");
-        mailMessage.setMessage("Добро пожаловать в наш магазин! " + "\n Чтобы завершить регистрацию перейдите по ссылке \n " + "" + emailConfirmationUrl);
+        mailMessage.setMessage("Добро пожаловать! " + "\n Чтобы завершить регистрацию перейдите по ссылке \n " + "" + emailConfirmationUrl);
         send(mailMessage);
     }
 

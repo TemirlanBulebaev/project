@@ -21,7 +21,7 @@ public class UserDeviceService {
     /**
      * Создание нового устройства для пользователя
      */
-    public UserDevice createUserDevice(DeviceInfo deviceInfo) {
+    public UserDevice createUserDevice(DeviceInfo deviceInfo) { // примнимаем информацию о девайсе
         UserDevice userDevice = new UserDevice();
         userDevice.setDeviceId(deviceInfo.getDeviceId());
         userDevice.setDeviceType(deviceInfo.getDeviceType());

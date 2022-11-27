@@ -25,7 +25,7 @@ public class EmailVerificationToken {
     private TokenStatus tokenStatus;
 
     @Column(name = "EXPIRY_DT", nullable = false)//ИСТЕКАЮЩИЙ СРОК ГОДНОСТИ
-    private Instant expiryDate;//expiryDate
+    private Instant expiryDate;
 
     public EmailVerificationToken() {}
 

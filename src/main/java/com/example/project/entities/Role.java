@@ -7,29 +7,28 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "ROLE")
-public class Role {
+@Entity
+@Table(name = "ROLE")
+public class Role  {
 
     @Id
-    @Column(name = "ROLE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "ROLE_ID")
+    @GeneratedValue (strategy =  GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "ROLE_NAME")
-    @Enumerated(EnumType.STRING)
+    @Enumerated (EnumType.STRING)
     @NaturalId
     private RoleName role;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<User> userList = new HashSet<>();
+    private Set<User> users = new HashSet<>();
+
+    public Role() {}
 
     public Role(RoleName role) {
         this.role = role;
-    }
-
-    public Role() {
-
     }
 
     public boolean isAdminRole() {
@@ -37,7 +36,7 @@ public class Role {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
@@ -45,19 +44,29 @@ public class Role {
     }
 
     public RoleName getRole() {
-        return role;
+        return this.role;
     }
 
     public void setRole(RoleName role) {
         this.role = role;
     }
 
-    public Set<User> getUserList() {
-        return userList;
+    public Set<User> getUsers() {
+        return this.users;
     }
 
-    public void setUserList(Set<User> userList) {
-        this.userList = userList;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                " id='" + getId() + "'" +
+                ", role='" + getRole() + "'" +
+                ", users='" + getUsers() + "'" +
+                "}";
+    }
+
 }
 

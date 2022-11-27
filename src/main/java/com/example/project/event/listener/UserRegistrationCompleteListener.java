@@ -30,18 +30,22 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
 
     @Override
     @Async // TODO: ?
-    public void onApplicationEvent(UserRegistrationComplete userRegistrationComplete) {
-        sendEmailVerification(userRegistrationComplete);
+    public void onApplicationEvent(UserRegistrationComplete userRegistrationComplete) { // событие
+        sendEmailVerification(userRegistrationComplete);//передаем событие в фунцкию
     }
 
+    /**
+     * Отправка подтверждения по электронной почте
+     */
     private void sendEmailVerification(UserRegistrationComplete userRegistrationComplete) {
 
 
-        User user = userRegistrationComplete.getUser();
-        String token = emailVerificationTokenService.createNewToken();
-        emailVerificationTokenService.createVirficationToken(user, token);
+        User user = userRegistrationComplete.getUser();//получаем юзера
+        String token = emailVerificationTokenService.createNewToken(); // Создаем новый токен
+        emailVerificationTokenService.createVirficationToken(user, token);// создаем подтвержденный токен
 
-        String userEmail =  user.getEmail();
+        String userEmail =  user.getEmail();// получаем почту изера
+        //создаем сообщение для подтверждения
         String emailConfirmationUrl =
                 userRegistrationComplete.getRedirectUrl().queryParam("token", token).toUriString();
 
