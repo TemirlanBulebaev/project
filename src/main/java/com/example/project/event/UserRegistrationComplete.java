@@ -8,7 +8,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class UserRegistrationComplete extends ApplicationEvent {//ApplicationEvent - Публикация событий
 
     //Поля, помеченные ключевым словом transient, не сериализуются.
-    private transient UriComponentsBuilder redirectUrl; //для перенаправления
+    private transient UriComponentsBuilder redirectUrl;
     private User user;
 
     public UserRegistrationComplete(User user, UriComponentsBuilder redirectUrl) {

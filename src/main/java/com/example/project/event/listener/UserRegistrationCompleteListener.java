@@ -28,10 +28,13 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
         this.mailService = mailService;
     }
 
+    /**
+     * Обработка принятого события
+     */
     @Override
-    @Async // TODO: ?
-    public void onApplicationEvent(UserRegistrationComplete userRegistrationComplete) { // событие
-        sendEmailVerification(userRegistrationComplete);//передаем событие в фунцкию
+    @Async
+    public void onApplicationEvent(UserRegistrationComplete userRegistrationComplete) {
+        sendEmailVerification(userRegistrationComplete);
     }
 
     /**
@@ -40,12 +43,11 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
     private void sendEmailVerification(UserRegistrationComplete userRegistrationComplete) {
 
 
-        User user = userRegistrationComplete.getUser();//получаем юзера
-        String token = emailVerificationTokenService.createNewToken(); // Создаем новый токен
-        emailVerificationTokenService.createVirficationToken(user, token);// создаем подтвержденный токен
+        User user = userRegistrationComplete.getUser();
+        String token = emailVerificationTokenService.createNewToken();
+        emailVerificationTokenService.createVirficationToken(user, token);
 
-        String userEmail =  user.getEmail();// получаем почту изера
-        //создаем сообщение для подтверждения
+        String userEmail =  user.getEmail();
         String emailConfirmationUrl =
                 userRegistrationComplete.getRedirectUrl().queryParam("token", token).toUriString();
 

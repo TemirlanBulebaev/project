@@ -40,6 +40,10 @@ public class User extends DateAudit {
     @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
     private Boolean isEmailVerified;
 
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name ="INVENTORY_ID", unique = true)
+    private UserInventory userInventory;
+
     public User() {
         super();
     }
@@ -52,6 +56,7 @@ public class User extends DateAudit {
         this.active = user.active;
         this.isEmailVerified = user.isEmailVerified;
         this.roles = user.roles;
+        this.userInventory = user.userInventory;
     }
     public User(Long id,
                 String username,
@@ -59,7 +64,8 @@ public class User extends DateAudit {
                 String password,
                 Boolean active,
                 Boolean isEmailVerified,
-                Set<Role> roles
+                Set<Role> roles,
+                UserInventory userInventory
                ) {
         this.id = id;
         this.username = username;
@@ -68,13 +74,18 @@ public class User extends DateAudit {
         this.active = active;
         this.isEmailVerified = isEmailVerified;
         this.roles = roles;
+        this.userInventory = userInventory;
     }
-
+    /**
+     * Добавление роли
+     */
     public void addRole(Role role) {
         this.roles.add(role);
         role.getUsers().add(this);
     }
-
+    /**
+     * Добавление ролей
+     */
     public void addRoles(Set<Role> roles) {
         roles.forEach(this::addRole);
     }
@@ -124,7 +135,7 @@ public class User extends DateAudit {
         this.email = email;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return active;
     }
 
@@ -148,6 +159,14 @@ public class User extends DateAudit {
         this.isEmailVerified = isEmailVerified;
     }
 
+    public UserInventory getUserInventory() {
+        return userInventory;
+    }
+
+    public void setUserInventory(UserInventory userInventory) {
+        this.userInventory = userInventory;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -158,6 +177,7 @@ public class User extends DateAudit {
                 ", active=" + active +
                 ", roles=" + roles +
                 ", isEmailVerified=" + isEmailVerified +
+                ", userInventory=" + userInventory +
                 '}';
     }
 }

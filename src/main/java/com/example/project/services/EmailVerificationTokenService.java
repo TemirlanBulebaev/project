@@ -30,16 +30,16 @@ public class EmailVerificationTokenService {
     }
 
     /**
-     * Создание подтвержденного токена
+     * Создание токена для подтверждения эл.почты
      */
     public void createVirficationToken(User user, String token) {
-        EmailVerificationToken emailVerificationToken = new EmailVerificationToken();//создаем токен подтвержденной почты
-        emailVerificationToken.setToken(token); // устанавливаем токен
-        emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);// Устанавливаем изменение статуса
-        emailVerificationToken.setUser(user);//устанавливаем юзера
-        emailVerificationToken.setExpiryDate(Instant.now().plusMillis(tokenExpired));//обновляем истечение срока действия токена
+        EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
+        emailVerificationToken.setToken(token);
+        emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);
+        emailVerificationToken.setUser(user);
+        emailVerificationToken.setExpiryDate(Instant.now().plusMillis(tokenExpired));
         logger.info("Generated Email verification token :" );
-        emailVerificationTokenRepository.save(emailVerificationToken); //сохраняем подтвержденый токен
+        emailVerificationTokenRepository.save(emailVerificationToken);
     }
 
     public void verifyExpiration(EmailVerificationToken verificationToken) {

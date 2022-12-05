@@ -15,7 +15,6 @@ public class EmailVerificationToken {
     @Column(name = "TOKEN", nullable = false, unique = true)
     private String token;
 
-    //targetEntity = User.class Настроить сопоставление "многие ко многим"
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "USER_ID")
     private User user;

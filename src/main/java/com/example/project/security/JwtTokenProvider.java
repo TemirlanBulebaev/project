@@ -35,7 +35,6 @@ public class JwtTokenProvider {
 
     /**
      * Создание токена
-     * @param jwtUser
      */
     public String createToken (JwtUser jwtUser) {
 

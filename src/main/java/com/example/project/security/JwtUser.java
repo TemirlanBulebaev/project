@@ -38,7 +38,7 @@ public class JwtUser extends User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return super.getActive();
+        return super.isActive();
     }
 
     @Override

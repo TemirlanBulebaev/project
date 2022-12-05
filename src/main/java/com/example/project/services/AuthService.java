@@ -53,7 +53,6 @@ public class AuthService {
     /**
      * Регистрация пользователя
      */
-//Optional всего лишь контейнер: он может содержать значение или некоторый тип Т или просто быть null
     public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
 
         String email = registrationRequest.getEmail();
@@ -83,40 +82,42 @@ public class AuthService {
         return userService.existsByEmail(userEmail);
     }
 
+    /**
+     * Есть ли пользователь с такими именем
+     */
     private boolean usernameAlreadyExists(String username) {
         return userService.existsByUsername(username);
     }
 
     /**
-     * подтвердите регистрацию по электронной почте
+     * подтверждение регистрации по электронной почте
      */
     public Optional<User> confirmEmailRegistration(String token) {
 
-        EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token);//Получаем проверочный токен из сервиса
+        EmailVerificationToken verificationToken = emailVerificationTokenService.findByToken(token);
+        User registeredUser = verificationToken.getUser();
 
-        User registeredUser = verificationToken.getUser(); //получаем юзера по найденному токену
-
-        if  (registeredUser.getIsEmailVerified()) {//если почта подтверждена
+        if  (registeredUser.getIsEmailVerified()) {
             logger.error("Пользователь " + registeredUser.getEmail() + " уже потверждён");
             return Optional.of(registeredUser);
         }
 
-        emailVerificationTokenService.verifyExpiration(verificationToken); // Проверка срока годности токена
-        verificationToken.setConfirmedStatus();// устанавливаем статус - подтверждено
+        emailVerificationTokenService.verifyExpiration(verificationToken);
+        verificationToken.setConfirmedStatus();
 
-        emailVerificationTokenService.save(verificationToken); // сохраняем подтвержденный токен
-        registeredUser.setIsEmailVerified(true);//устанавливаем подтвержденную почту
+        emailVerificationTokenService.save(verificationToken);
+        registeredUser.setIsEmailVerified(true);
 
-        userService.saveUser(registeredUser); // сохраняем подтвержденного пользователя
+        userService.saveUser(registeredUser);
         return Optional.of(registeredUser);
     }
 
     /**
-     * Вход по почте, паролю и устройству
+     * Аунтетификация пользователя по почте и паролю
      */
-    public Optional<Authentication> authenticateUser(LoginRequest loginRequest) {//Создаем проверенного юзера
+    public Optional<Authentication> authenticateUser(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
-        return Optional.ofNullable(authenticationManager.authenticate(user));// Делигируем проверку провайдерам
+        return Optional.ofNullable(authenticationManager.authenticate(user));
     }
 
     /**
@@ -130,14 +131,14 @@ public class AuthService {
      * Обновление токена для устройства
      */
     public Optional<RefreshToken> createAndPersistRefreshTokenForDevice(Authentication authentication,
-                                                                        LoginRequest loginRequestDto) {
-        User jwtUser = (User) authentication.getPrincipal();//приводим к типу Юзера
+                                                                        LoginRequest loginRequest) {
+        User jwtUser = (User) authentication.getPrincipal();
+        userDeviceService.findByUserId(jwtUser.getId())
+                .map(UserDevice::getRefreshToken)
+                .map(RefreshToken::getId)
+                .ifPresent(refreshTokenService::deleteById);
 
-        userDeviceService.findByUserId( //находим юзера по id
-                        jwtUser.getId()).map(UserDevice::getRefreshToken)//Получаем jwt юзера и все токены его девайсов
-                .map(RefreshToken::getId) //Получаем id токенов
-                .ifPresent(refreshTokenService::deleteById); // если в них что-то есть, то удалеяем их
-        UserDevice userDevice = userDeviceService.createUserDevice(loginRequestDto.getDeviceInfo()); // обновляем информацию  об устройстве
+        UserDevice userDevice = userDeviceService.createUserDevice(loginRequest.getDeviceInfo());
         RefreshToken refreshToken = refreshTokenService.createRefreshToken();
 
         userDevice.setUser(jwtUser);
@@ -145,7 +146,7 @@ public class AuthService {
 
         refreshToken.setUserDevice(userDevice);
         refreshToken = refreshTokenService.save(refreshToken);
-        logger.info("Добавлено новое устройство " + userDevice.getDeviceId()
+        logger.info("Добавлено устройство " + userDevice.getDeviceId()
                 + " для пользователя " + jwtUser.getUsername());
         return Optional.ofNullable(refreshToken);
     }

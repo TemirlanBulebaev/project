@@ -19,9 +19,9 @@ public class UserDeviceService {
     }
 
     /**
-     * Создание нового устройства для пользователя
+     * Создание устройства для пользователя
      */
-    public UserDevice createUserDevice(DeviceInfo deviceInfo) { // примнимаем информацию о девайсе
+    public UserDevice createUserDevice(DeviceInfo deviceInfo) {
         UserDevice userDevice = new UserDevice();
         userDevice.setDeviceId(deviceInfo.getDeviceId());
         userDevice.setDeviceType(deviceInfo.getDeviceType());
@@ -30,6 +30,9 @@ public class UserDeviceService {
         return userDevice;
     }
 
+    /**
+     * Находим устройство по id пользователя
+     */
     public Optional<UserDevice> findByUserId(Long userId) {
         return userDeviceRepository.findByUserId(userId);
     }

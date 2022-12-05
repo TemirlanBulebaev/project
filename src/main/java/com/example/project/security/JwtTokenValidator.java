@@ -1,7 +1,7 @@
 package com.example.project.security;
 
 
-import com.example.project.cache.LoggedOutJwtTokenCache;
+import com.example.project.advice.cache.LoggedOutJwtTokenCache;
 import com.example.project.event.UserLogoutSuccess;
 import com.example.project.exceptions.InvalidTokenRequestException;
 import io.jsonwebtoken.*;

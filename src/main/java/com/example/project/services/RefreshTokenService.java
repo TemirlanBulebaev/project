@@ -28,7 +28,7 @@ public class RefreshTokenService {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setExpityDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(Util.generateRandomUuid());
-        refreshToken.setRefreshCount(0L); // TODO: ?
+        refreshToken.setRefreshCount(0L);
         return refreshToken;
     }
 

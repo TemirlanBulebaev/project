@@ -1,4 +1,4 @@
-package com.example.project.cache;
+package com.example.project.advice.cache;
 
 import com.example.project.event.UserLogoutSuccess;
 import com.example.project.security.JwtTokenProvider;
