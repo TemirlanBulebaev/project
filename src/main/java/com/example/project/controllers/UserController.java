@@ -47,7 +47,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/{username}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     //@ApiOperation(value = "Получение информации о пользователе" +
             //"Доступно всем авторизованным пользователяим")
     public ResponseEntity getUserProfile(@PathVariable(value = "username") String username,

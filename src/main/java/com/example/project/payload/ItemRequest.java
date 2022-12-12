@@ -1,7 +1,6 @@
 package com.example.project.payload;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 //@ApiModel(value = "Item Request", description = "Item Request")
@@ -15,6 +14,9 @@ public class ItemRequest {
     @NotBlank(message = "Description cannot be blank")
     //@ApiModelProperty(value = "Описание Item", required = true, allowableValues = "NonEmpty String")
     private String description;
+
+    @NotNull(message = "Description cannot be blank")
+    private Integer weight;//g
 
     @NotNull(message = "One price must be specified")
     //@ApiModelProperty(value = "Цены во внутренней валюте для Item", required = true, allowableValues = "NonEmpty String")
@@ -47,11 +49,20 @@ public class ItemRequest {
         this.price = price;
     }
 
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
     @Override
     public String toString() {
         return "ItemRequest{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", weight=" + weight +
                 ", price=" + price +
                 '}';
     }

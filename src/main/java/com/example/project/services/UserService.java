@@ -5,6 +5,7 @@ import com.example.project.dto.UserProfileDto;
 import com.example.project.entities.Role;
 import com.example.project.entities.User;
 import com.example.project.entities.UserDevice;
+import com.example.project.entities.UserInventory;
 import com.example.project.event.UserLogoutSuccess;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.exceptions.UserLogoutException;
@@ -63,6 +64,8 @@ public class UserService {
         newUser.addRoles(getRolesForNewUser(isAdmin));
         newUser.setActive(true);
         newUser.setIsEmailVerified(false);
+        UserInventory userInventory = new UserInventory();
+        newUser.setUserInventory(userInventory);
         return Optional.of(newUser);
     }
 

@@ -1,6 +1,7 @@
 package com.example.project.entities;
 
 import com.example.project.entities.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -40,6 +41,7 @@ public class User extends DateAudit {
     @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
     private Boolean isEmailVerified;
 
+    //@JsonIgnore
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name ="INVENTORY_ID", unique = true)
     private UserInventory userInventory;

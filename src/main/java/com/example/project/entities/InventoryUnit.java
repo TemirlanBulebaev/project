@@ -70,13 +70,4 @@ public class InventoryUnit extends DateAudit {
         this.userInventory = userInventory;
     }
 
-    @Override
-    public String toString() {
-        return "InventoryUnit{" +
-                "id=" + id +
-                ", amountItems=" + amountItems +
-                ", item=" + item +
-                ", userInventory=" + userInventory +
-                '}';
-    }
 }

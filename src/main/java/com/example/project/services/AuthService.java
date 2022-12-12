@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Service
@@ -53,7 +54,7 @@ public class AuthService {
     /**
      * Регистрация пользователя
      */
-    public Optional<User> registrationUser (RegistrationRequest registrationRequest) {
+    public Optional<User> registrationUser (@Valid RegistrationRequest registrationRequest) {
 
         String email = registrationRequest.getEmail();
         String username = registrationRequest.getUsername();

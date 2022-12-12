@@ -2,6 +2,7 @@ package com.example.project.services;
 
 import com.example.project.dto.ItemDto;
 import com.example.project.entities.Item;
+import com.example.project.entities.PackageType;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.payload.EditItemRequest;
 import com.example.project.payload.ItemRequest;
@@ -39,22 +40,23 @@ public class ItemService {
     /**
      * Добавление Item
      */
-    public Optional<Item> addItem(ItemRequest itemRequest, JwtUser jwtUser) {
+    public Optional<Item> addItem(ItemRequest itemRequest) {
 
         Item newItem = new Item();
         newItem.setName(itemRequest.getName());
         newItem.setDescription(itemRequest.getDescription());
+        newItem.setWeight(itemRequest.getWeight());
         newItem.setPrice(itemRequest.getPrice());
-        newItem.setAuthor(jwtUser.getUsername());
         newItem.setActive(true);
         Item savedItem = saveItem(newItem);
-        logger.info("Создан новый Item :" + savedItem.getName());
+        logger.info("Создан новый товар :" + savedItem.getName());
         return Optional.of(savedItem);
     }
 
-        private Item saveItem(Item item) {
-        return itemRepository.save(item);
+        private Item saveItem(Item Item) {
+        return itemRepository.save(Item);
     }
+
 
     /**
      * Получение Items
@@ -70,7 +72,7 @@ public class ItemService {
     }
 
     /**
-     * Получение страницы со всеми Item
+     * Получение страницы со всеми Item для ADMIN
      */
     private Page<Item> getPageItemFromAdmin(Pageable pageable) {
         return findAllItem(pageable);
@@ -79,17 +81,18 @@ public class ItemService {
         return itemRepository.findAll(pageable);
     }
 
+
     /**
      * Получение списка всех ItemDto
      */
     private Set<ItemDto> getItemsDtoFromUser() {
-        Set<Item> items = findAllByActive(true);
-        if (items.isEmpty()) {
+        Set<Item> Item = findAllByActive(true);
+        if (Item.isEmpty()) {
             logger.info("Нет активных Item");
             throw new ResourceNotFoundException("Item", "active", true);
         }
 
-        Set<ItemDto> itemsDto = items.stream().map(item -> getItemDto(item.getId())).collect(Collectors.toSet());
+        Set<ItemDto> itemsDto = Item.stream().map( item -> getItemDto(item.getId())).collect(Collectors.toSet());
         return itemsDto;
     }
 
@@ -103,26 +106,26 @@ public class ItemService {
 
     private Item findById(Long id) {
         return itemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Товар", "id", id));
     }
 
     private Set<Item> findAllByActive(boolean active) {
-        Set<Item> activeItems = itemRepository.findAllByActive(active);
-        if (activeItems == null) {
+        Set<Item> activeItem = itemRepository.findAllByActive(active);
+        if (activeItem == null) {
             logger.error("Нет активных Item");
             throw new ResourceNotFoundException("Items", "active", true);
         }
-        return activeItems;
+        return activeItem;
     }
 
     /**
      * Удаление (Выключение) Item
      */
     public void deleteItem(long itemId) {
-        Item item = findById(itemId);
-        item.setActive(false);
-        saveItem(item);
-        logger.info("Item " + itemId + " был выключен");
+        Item Item = findById(itemId);
+        Item.setActive(false);
+        saveItem(Item);
+        logger.info("Товар " + itemId + " был выключен");
     }
 
     /**
@@ -135,9 +138,9 @@ public class ItemService {
         if (roles.contains("ROLE_ADMIN")) {
             return findById(itemId);
         }
-        Item item = findById(itemId);
-        if (!item.getActive()) {
-            logger.error("Item  " + itemId + " не активен");
+        Item Item = findById(itemId);
+        if (!Item.getActive()) {
+            logger.error("Товар " + itemId + " не активен");
             throw new ResourceNotFoundException("Price", "active", true);
         }
         return getItemDto(itemId);
@@ -148,15 +151,18 @@ public class ItemService {
      */
     public Optional<Item> editItem(long id, EditItemRequest editItemRequest) {
 
-        Item item = findById(id);
-        item.setName(editItemRequest.getName());
-        item.setDescription(editItemRequest.getDescription());
-        item.setPrice(editItemRequest.getPrice());
-        item.setActive(editItemRequest.getActive());
-        saveItem(item);
-        logger.info("Item " + item.getName() + " был изменен");
-        return Optional.of(item);
+        Item Item = findById(id);
+        Item.setName(editItemRequest.getName());
+        Item.setDescription(editItemRequest.getDescription());
+        Item.setWeight(editItemRequest.getWeight());
+        Item.setPrice(editItemRequest.getPrice());
+        Item.setActive(editItemRequest.getActive());
+        saveItem(Item);
+        logger.info("Item " + Item.getName() + " был изменен");
+        return Optional.of(Item);
     }
+
+
 //    /**
 //     * Получение Items
 //     * Если ADMIN -> page Items, если USER -> set ItemsDto

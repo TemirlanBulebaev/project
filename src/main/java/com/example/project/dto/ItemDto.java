@@ -9,9 +9,11 @@ public class ItemDto {
     private Long id;
     private String name;
     private String description;
+
+    private Integer weight;
     private Long price;
 
-    private String author;
+
 
     public ItemDto() {}
 
@@ -21,6 +23,7 @@ public class ItemDto {
         itemDto.setId(item.getId());
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
+        itemDto.setWeight(item.getWeight());
         itemDto.setPrice(item.getPrice());
 
         return itemDto;
@@ -64,6 +67,14 @@ public class ItemDto {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     @Override

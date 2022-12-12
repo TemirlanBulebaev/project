@@ -20,11 +20,17 @@ public class Item extends DateAudit {
     @Column(name = "DESCRIPTION", columnDefinition = "text")
     private String description;
 
+    @Column(name = "WEIGHT")
+    private Integer weight;
+
+    @Column(name = "PACKAGE")
+    private PackageType packageType;
+
+    @Column(name = "STICKER_TYPE")
+    private StickerType stickerType;
     @Column(name = "PRICE")
     private Long price;
 
-    @Column(name = "AUTHOR")
-    private String author;
 
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean active;
@@ -33,22 +39,19 @@ public class Item extends DateAudit {
         super();
     }
 
-    public Item(Long id,
-                String name,
-                String description,
-                Long price,
-                String author,
-                Boolean active) {
+    public Item(Long id, String name, String description, Integer weight, Long price, Boolean active) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.weight = weight;
+        setPackageType(weight);
+        setStickerType(weight);
         this.price = price;
-        this.author = author;
         this.active = active;
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -56,34 +59,41 @@ public class Item extends DateAudit {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getAuthor() {
-        return author;
+    public Integer getWeight() {
+        return weight;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
-    public Boolean getActive() {
-        return active;
+    public PackageType getPackageType() {
+        return packageType;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setPackageType(Integer weight) {
+        if (weight <= 100) {
+            this.packageType = PackageType.CRAFT_100;
+        } if (weight <= 250) {
+            this.packageType = PackageType.BLACK_250;
+        } else {
+            this.packageType = PackageType.BLACK_1000;
+        }
     }
 
     public Long getPrice() {
@@ -94,15 +104,25 @@ public class Item extends DateAudit {
         this.price = price;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", author='" + author + '\'' +
-                ", active=" + active +
-                '}';
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public StickerType getStickerType() {
+        return stickerType;
+    }
+
+    public void setStickerType(Integer weight) {
+        if (weight <= 100) {
+            this.stickerType = StickerType.STICKER_100;
+        } if (weight <= 250) {
+            this.stickerType = StickerType.STICKER_250;
+        } else {
+            this.stickerType = StickerType.STICKER_1000;
+        }
     }
 }

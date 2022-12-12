@@ -31,14 +31,10 @@ public class ItemController {
      * Добавление товара
      */
     @PostMapping("/add")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     //@ApiOperation(value = "Добавление Item")
-    public ResponseEntity addItem(@Valid @RequestBody ItemRequest itemRequest,
-                                  @AuthenticationPrincipal JwtUser jwtUser
-    ) {
-        return itemService.addItem(itemRequest, jwtUser)
-                .map(item -> ResponseEntity.ok(new ApiResponse(true, "Товар успешно, сохранен!")))
-                .orElseThrow(() -> new InvalidTokenRequestException("Email Verification Token", "1231", "Не удалось подтвердить регистрацию")); //TODO реалихзовать ошибку
+    public ResponseEntity addItem(@Valid @RequestBody ItemRequest itemRequest) {
+        return ResponseEntity.ok().body(itemService.addItem(itemRequest));
     }
 
     /**
@@ -47,7 +43,7 @@ public class ItemController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('USER')")
     //@ApiOperation(value = "Получение Items. Формат ответа зависит от роли")
-    public ResponseEntity getItems(Pageable pageable, // пагинация
+    public ResponseEntity getItems(Pageable pageable,
                                    @AuthenticationPrincipal JwtUser jwtUser) {
 
         return ResponseEntity.ok().body(itemService.getItems(pageable, jwtUser));
@@ -57,13 +53,14 @@ public class ItemController {
      *  Удаление (Выключение) Item
      */
     @DeleteMapping("/{id}/delete")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     //@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
     public ResponseEntity deleteItem(@PathVariable(value = "id") Long id,
                                      @AuthenticationPrincipal JwtUser jwtUser) {
         itemService.deleteItem(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Item " + id + " был удален"));
+        return ResponseEntity.ok(new ApiResponse(true, "Товар " + id + " был удален"));
     }
+
 
     /**
      * Получение товара по id
@@ -81,11 +78,10 @@ public class ItemController {
      * Изменение товара
      */
     @PutMapping("/{id}/edit")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     //@ApiOperation(value = "Изменение Item (без цен)")
     public ResponseEntity editItem(@PathVariable(value = "id") Long id,
-                                   @Valid @RequestBody EditItemRequest editItemRequest,
-                                   @AuthenticationPrincipal JwtUser jwtUser) {
+                                   @Valid @RequestBody EditItemRequest editItemRequest) {
 
         return ResponseEntity.ok().body(itemService.editItem(id, editItemRequest));
     }
