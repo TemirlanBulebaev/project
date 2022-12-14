@@ -2,10 +2,10 @@ package com.example.project.controllers;
 
 import com.example.project.dto.ApiResponse;
 import com.example.project.payload.*;
-import com.example.project.repositories.StickerRepository;
 import com.example.project.security.JwtUser;
 import com.example.project.services.GreenCoffeeService;
 import com.example.project.services.PackageService;
+import com.example.project.services.RoastedCoffeeService;
 import com.example.project.services.StickerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,15 @@ public class WarehouseController {
 
     private final GreenCoffeeService greenCoffeeService;
     private final PackageService packageService;
+    private final RoastedCoffeeService roastedCoffeeService;
 
     private final StickerService stickerService;
 
     @Autowired
-    public WarehouseController(GreenCoffeeService greenCoffeeService, PackageService packageService, StickerService stickerService) {
+    public WarehouseController(GreenCoffeeService greenCoffeeService, PackageService packageService, RoastedCoffeeService roastedCoffeeService, StickerService stickerService) {
         this.greenCoffeeService = greenCoffeeService;
         this.packageService = packageService;
+        this.roastedCoffeeService = roastedCoffeeService;
         this.stickerService = stickerService;
     }
 
@@ -78,6 +80,16 @@ public class WarehouseController {
         greenCoffeeService.deleteGreenCoffee(id);
         return ResponseEntity.ok(new ApiResponse(true, "Позиция " + id + " была удалена"));
     }
+
+    /**
+     * Обжарка позиции зеленого кофе
+     */
+    @PostMapping("/roast")
+    public ResponseEntity roastGreenCoffee(@RequestBody CountRoastCoffeeRequest countRoastCoffeeRequest) {
+        return ResponseEntity.ok().body(roastedCoffeeService.addRoast(countRoastCoffeeRequest));
+    }
+
+
 
 
     /**

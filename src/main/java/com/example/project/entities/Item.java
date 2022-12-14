@@ -17,6 +17,9 @@ public class Item extends DateAudit {
     @Column(name = "NAME", nullable = false)
     private String name;
 
+    @Column(name = "COFFEE_NAME", nullable = false)
+    private String coffeeName;
+
     @Column(name = "DESCRIPTION", columnDefinition = "text")
     private String description;
 
@@ -24,9 +27,11 @@ public class Item extends DateAudit {
     private Integer weight;
 
     @Column(name = "PACKAGE")
+    @Enumerated(value = EnumType.STRING)
     private PackageType packageType;
 
     @Column(name = "STICKER_TYPE")
+    @Enumerated(value = EnumType.STRING)
     private StickerType stickerType;
     @Column(name = "PRICE")
     private Long price;
@@ -39,9 +44,10 @@ public class Item extends DateAudit {
         super();
     }
 
-    public Item(Long id, String name, String description, Integer weight, Long price, Boolean active) {
+    public Item(Long id, String name, String coffeeName, String description, Integer weight, Long price, Boolean active) {
         this.id = id;
         this.name = name;
+        this.coffeeName = coffeeName;
         this.description = description;
         this.weight = weight;
         setPackageType(weight);
@@ -49,6 +55,7 @@ public class Item extends DateAudit {
         this.price = price;
         this.active = active;
     }
+
 
     public Long getId() {
         return id;
@@ -64,6 +71,14 @@ public class Item extends DateAudit {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCoffeeName() {
+        return coffeeName;
+    }
+
+    public void setCoffeeName(String coffeeName) {
+        this.coffeeName = coffeeName;
     }
 
     public String getDescription() {
@@ -87,11 +102,11 @@ public class Item extends DateAudit {
     }
 
     public void setPackageType(Integer weight) {
-        if (weight <= 100) {
+        if (weight == 100) {
             this.packageType = PackageType.CRAFT_100;
-        } if (weight <= 250) {
+        } if (weight == 250) {
             this.packageType = PackageType.BLACK_250;
-        } else {
+        } if (weight == 1000) {
             this.packageType = PackageType.BLACK_1000;
         }
     }
@@ -117,11 +132,11 @@ public class Item extends DateAudit {
     }
 
     public void setStickerType(Integer weight) {
-        if (weight <= 100) {
+        if (weight == 100) {
             this.stickerType = StickerType.STICKER_100;
-        } if (weight <= 250) {
+        } if (weight == 250) {
             this.stickerType = StickerType.STICKER_250;
-        } else {
+        } if (weight == 1000) {
             this.stickerType = StickerType.STICKER_1000;
         }
     }

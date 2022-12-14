@@ -1,6 +1,7 @@
 package com.example.project.services;
 
 import com.example.project.entities.Package;
+import com.example.project.entities.PackageType;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.payload.EditPackageRequest;
 import com.example.project.payload.PackageRequest;
@@ -60,7 +61,7 @@ public class PackageService {
         editPackage.setName(editPackageRequest.getName());
         editPackage.setAmount(editPackageRequest.getAmount());
         savePackage(editPackage);
-        logger.info("информация об упаковке " + editPackage.getName() + " была изменена");
+        logger.info("Информация об упаковке " + editPackage.getName() + " была изменена");
         return Optional.of(editPackage);
 
     }
@@ -70,4 +71,5 @@ public class PackageService {
         logger.info("Информация об упаковке " + id + "была удалена");
         packageRepository.deleteById(id);
     }
+
 }

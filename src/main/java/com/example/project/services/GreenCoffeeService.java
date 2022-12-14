@@ -1,7 +1,9 @@
 package com.example.project.services;
 
 import com.example.project.entities.GreenCoffee;
+import com.example.project.entities.RoastedCoffee;
 import com.example.project.exceptions.ResourceNotFoundException;
+import com.example.project.payload.CountRoastCoffeeRequest;
 import com.example.project.payload.EditGreenCoffeeRequest;
 import com.example.project.payload.GreenCoffeeRequest;
 import com.example.project.repositories.GreenCoffeeRepository;
@@ -61,7 +63,7 @@ public class GreenCoffeeService {
         greenCoffeeRepository.deleteById(id);
     }
 
-    private GreenCoffee findById(Long id) {
+    GreenCoffee findById(Long id) {
         return greenCoffeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Позиция", "id", id));
     }
@@ -81,4 +83,6 @@ public class GreenCoffeeService {
         logger.info("Позиция " + greenCoffee.getName() + " была изменена");
         return Optional.of(greenCoffee);
     }
+
+
 }

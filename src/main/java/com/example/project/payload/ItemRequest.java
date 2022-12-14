@@ -1,5 +1,6 @@
 package com.example.project.payload;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -10,6 +11,10 @@ public class ItemRequest {
     @NotBlank(message = "Item name cannot be blank")
     //@ApiModelProperty(value = "Название Item", required = true, allowableValues = "NonEmpty String")
     private String name;
+
+    @NotNull(message = "Item name cannot be null")
+    @NotBlank(message = "Item name cannot be blank")
+    private String coffeeName;
 
     @NotBlank(message = "Description cannot be blank")
     //@ApiModelProperty(value = "Описание Item", required = true, allowableValues = "NonEmpty String")
@@ -31,6 +36,14 @@ public class ItemRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCoffeeName() {
+        return coffeeName;
+    }
+
+    public void setCoffeeName(String coffeeName) {
+        this.coffeeName = coffeeName;
     }
 
     public String getDescription() {
