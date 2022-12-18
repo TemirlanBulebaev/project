@@ -2,7 +2,6 @@ package com.example.project.services;
 
 import com.example.project.entities.GreenCoffee;
 import com.example.project.entities.RoastedCoffee;
-import com.example.project.payload.CountRoastCoffeeRequest;
 import com.example.project.repositories.RoastedCoffeeRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,12 +27,12 @@ public class RoastedCoffeeService {
     /**
      * Добавить жареный кофе на склад
      */
-    public Optional addRoast(CountRoastCoffeeRequest countRoastCoffeeRequest) {//TODO Прописать потерю валажности
+    public Optional addRoastCoffee(Long id, String amountBatch) {//TODO Прописать потерю валажности
         RoastedCoffee newRoastedCoffee  = new RoastedCoffee();
-        GreenCoffee greenCoffee = greenCoffeeService.findById(countRoastCoffeeRequest.getId());
+        Long amount = Long.parseLong(amountBatch);
+        GreenCoffee greenCoffee = greenCoffeeService.findById(id);
         newRoastedCoffee.setName(greenCoffee.getName());
         Integer waterLoss = greenCoffee.getWaterLoss();
-        Long amount = countRoastCoffeeRequest.getAmount();
         Long rez = (long)((amount*12000*(1-waterLoss*0.01)));
         newRoastedCoffee.setWeight(rez);
         greenCoffee.setWeight(greenCoffee.getWeight()-12000);
@@ -41,7 +40,6 @@ public class RoastedCoffeeService {
         logger.info("Произошла обжарка:" + savedRoastedCoffee.getName());
         return Optional.of(savedRoastedCoffee);
     }
-
     private RoastedCoffee saveRoastedCoffee(RoastedCoffee newRoastedCoffee) {
         return roastedCoffeeRepository.save(newRoastedCoffee);
     }

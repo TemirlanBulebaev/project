@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -66,7 +67,8 @@ public class WarehouseController {
      */
     @PutMapping("/green/{id}/edit")
     public ResponseEntity editGreenCoffee(@PathVariable(value = "id") Long id,
-                                          @Valid @RequestBody EditGreenCoffeeRequest editGreenCoffeeRequest) {
+                                          @Valid @RequestBody EditGreenCoffeeRequest editGreenCoffeeRequest,
+                                          @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
 
         return ResponseEntity.ok().body(greenCoffeeService.editGreenCoffee(id, editGreenCoffeeRequest));
     }
@@ -84,9 +86,11 @@ public class WarehouseController {
     /**
      * Обжарка позиции зеленого кофе
      */
-    @PostMapping("/roast")
-    public ResponseEntity roastGreenCoffee(@RequestBody CountRoastCoffeeRequest countRoastCoffeeRequest) {
-        return ResponseEntity.ok().body(roastedCoffeeService.addRoast(countRoastCoffeeRequest));
+    @PostMapping("/green/{id}/roast")
+    public ResponseEntity roastGreenCoffee(@PathVariable(value = "id") Long id,
+                                           @RequestParam String amountBatch,
+                                           @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
+        return ResponseEntity.ok().body(roastedCoffeeService.addRoastCoffee(id, amountBatch));
     }
 
 

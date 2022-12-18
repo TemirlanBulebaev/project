@@ -1,9 +1,7 @@
 package com.example.project.services;
 
 import com.example.project.entities.GreenCoffee;
-import com.example.project.entities.RoastedCoffee;
 import com.example.project.exceptions.ResourceNotFoundException;
-import com.example.project.payload.CountRoastCoffeeRequest;
 import com.example.project.payload.EditGreenCoffeeRequest;
 import com.example.project.payload.GreenCoffeeRequest;
 import com.example.project.repositories.GreenCoffeeRepository;
