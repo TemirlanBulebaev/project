@@ -1,5 +1,6 @@
 package com.example.project.services;
 
+import com.example.project.dto.InventoryUnitDto;
 import com.example.project.dto.ItemDto;
 import com.example.project.entities.*;
 import com.example.project.entities.Package;
@@ -194,5 +195,14 @@ public class ItemService {
         saveItem(Item);
         logger.info("Item " + Item.getName() + " был изменен");
         return Optional.of(Item);
+    }
+
+    /**
+     * Покупка UserItem (копии Item)
+     */
+    public Set<InventoryUnitDto> buyItem(Long itemId, String amountItems, JwtUser jwtUser) {
+
+        Item item = findById(itemId);
+        return userService.getSavedInventoryUnit(jwtUser, amountItems, item);
     }
 }

@@ -181,9 +181,4 @@ public class WarehouseController {
         return ResponseEntity.ok(new ApiResponse(true, "Информация о наклейке " + id + " была удалена"));
     }
 
-
-
-
-
-
 }

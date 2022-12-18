@@ -1,11 +1,10 @@
 package com.example.project.services;
 
+import com.example.project.dto.InventoryUnitDto;
 import com.example.project.dto.UserDto;
+import com.example.project.dto.UserInventoryDto;
 import com.example.project.dto.UserProfileDto;
-import com.example.project.entities.Role;
-import com.example.project.entities.User;
-import com.example.project.entities.UserDevice;
-import com.example.project.entities.UserInventory;
+import com.example.project.entities.*;
 import com.example.project.event.UserLogoutSuccess;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.exceptions.UserLogoutException;
@@ -37,18 +36,25 @@ public class UserService {
     private final RoleService roleService;
     private final UserDeviceService userDeviceService;
     private final RefreshTokenService refreshTokenService;
+
+    private final UserInventoryService userInventoryService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
     public UserService(
             UserRepository userRepository,
             RoleService roleService,
-            PasswordEncoder passwordEncoder, UserDeviceService userDeviceService, RefreshTokenService refreshTokenService, ApplicationEventPublisher applicationEventPublisher) {
+            PasswordEncoder passwordEncoder,
+            UserDeviceService userDeviceService,
+            RefreshTokenService refreshTokenService,
+            UserInventoryService userInventoryService,
+            ApplicationEventPublisher applicationEventPublisher) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.userDeviceService = userDeviceService;
         this.refreshTokenService = refreshTokenService;
+        this.userInventoryService = userInventoryService;
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
@@ -162,6 +168,31 @@ public class UserService {
             throw new ResourceNotFoundException("Пользоватеоь", "username", username);
         }
         return Optional.of(UserDto.fromUser(user));
+    }
+
+    /**
+     * Получение сохраненного инвенторя
+     */
+    public Set<InventoryUnitDto> getSavedInventoryUnit(JwtUser jwtUser, String amountItems, Item item) {
+
+        String username = jwtUser.getUsername().toString();
+        User user = findByUsername(username);
+        UserInventory userInventory = user.getUserInventory();
+
+        // Добавление Item в инвентарь
+        Set<InventoryUnit> inventoryUnits = userInventoryService.addItem(userInventory, item, amountItems);
+        saveUser(user);
+        logger.info(item.getName() + " добавлен пользователю " + user.getUsername());
+        return inventoryUnits.stream()
+                .map(unit -> InventoryUnitDto.fromUser(unit)).collect(Collectors.toSet());
+    }
+
+    /**
+     * Получение своего инвенторя
+     */
+    public Optional<UserInventoryDto> getUserInventory(JwtUser jwtUser) {
+        User user = findByUsername(jwtUser.getUsername());
+        return Optional.of(userInventoryService.getUserInventory(user));
     }
 }
 

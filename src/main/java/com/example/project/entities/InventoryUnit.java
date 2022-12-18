@@ -16,7 +16,7 @@ public class InventoryUnit extends DateAudit {
     private Long id;
 
     @Column(name = "AMOUNT_ITEMS")
-    private Long amountItems;
+    private String amountItems;
 
     @OneToOne
     @JoinColumn(name = "ITEM_ID", referencedColumnName = "ITEM_ID")
@@ -31,7 +31,7 @@ public class InventoryUnit extends DateAudit {
         super();
     }
 
-    public InventoryUnit(Long id, Long amountItems, Item item, UserInventory userInventory) {
+    public InventoryUnit(Long id, String amountItems, Item item, UserInventory userInventory) {
         this.id = id;
         this.amountItems = amountItems;
         this.item = item;
@@ -46,11 +46,11 @@ public class InventoryUnit extends DateAudit {
         this.id = id;
     }
 
-    public Long getAmountItems() {
+    public String getAmountItems() {
         return amountItems;
     }
 
-    public void setAmountItems(Long amountItems) {
+    public void setAmountItems(String amountItems) {
         this.amountItems = amountItems;
     }
 

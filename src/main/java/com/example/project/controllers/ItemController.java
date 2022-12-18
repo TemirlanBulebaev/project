@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -48,6 +49,20 @@ public class ItemController {
 
         return ResponseEntity.ok().body(itemService.getItems(pageable, jwtUser));
     }
+    /**
+     * Покупка Item
+     */
+    @PostMapping("/{id}/buy")
+    @PreAuthorize("hasRole('USER')")
+    //@ApiOperation(value = "Покупка Item за внутреннюю валюту")
+    public ResponseEntity buyItem(@PathVariable(value = "id") Long itemId,
+                                  @RequestParam String amountItem,
+                                  @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
+
+
+        return ResponseEntity.ok().body(itemService.buyItem(itemId, amountItem, jwtUser));
+    }
+
 
     /**
      *  Удаление (Выключение) Item
