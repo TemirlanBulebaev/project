@@ -2,6 +2,7 @@ package com.example.project.services;
 
 import com.example.project.dto.InventoryUnitDto;
 import com.example.project.dto.ItemDto;
+import com.example.project.dto.UserInventoryDto;
 import com.example.project.entities.*;
 import com.example.project.entities.Package;
 import com.example.project.exceptions.ResourceNotFoundException;

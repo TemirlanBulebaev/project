@@ -3,12 +3,14 @@ package com.example.project.controllers;
 import com.example.project.dto.ApiResponse;
 import com.example.project.payload.LogOutRequest;
 import com.example.project.security.JwtUser;
+import com.example.project.services.UserInventoryService;
 import com.example.project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -18,10 +20,13 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final UserInventoryService userInventoryService;
+
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserInventoryService userInventoryService) {
         this.userService = userService;
+        this.userInventoryService = userInventoryService;
     }
 
     /**
@@ -86,6 +91,27 @@ public class UserController {
         userService.logout(jwtUser, logOutRequest);
         return ResponseEntity.ok(new ApiResponse(true, "Log out successful") );
     }
+
+    /**
+     * Получение своего инвенторя
+     */
+    @GetMapping("/inventory")
+    @PreAuthorize("hasRole('USER')")
+    //@ApiOperation(value = "Получение своего инвенторя")
+    public ResponseEntity getUserInventory (@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
+
+        return ResponseEntity.ok().body(userService.getUserInventory(jwtUser));
+    }
+
+    @PutMapping("/inventory/{unitId}/edit")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity getUserInventory (@PathVariable(value = "unitId") Long unitId,
+                                            @RequestParam String amountItems,
+                                            @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
+
+        return ResponseEntity.ok().body(userInventoryService.editUnit(unitId, amountItems));
+    }
+
 
 }
 

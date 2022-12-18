@@ -1,5 +1,6 @@
 package com.example.project.services;
 
+import com.example.project.dto.InventoryUnitDto;
 import com.example.project.dto.UserInventoryDto;
 import com.example.project.entities.InventoryUnit;
 import com.example.project.entities.Item;
@@ -7,10 +8,12 @@ import com.example.project.entities.User;
 import com.example.project.entities.UserInventory;
 import com.example.project.repositories.InventoryUnitRepository;
 import com.example.project.repositories.UserInventoryRepository;
+import com.sun.xml.bind.v2.TODO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -69,5 +72,25 @@ public class UserInventoryService {
      */
     public UserInventoryDto getUserInventory(User user) {
         return UserInventoryDto.fromUser(user.getUserInventory());
+    }
+
+
+    /**
+     * Изменение ячейки коризины
+     */
+    @Transactional
+    public InventoryUnitDto editUnit(Long unitId, String amountItems) {
+        InventoryUnit inventoryUnit = inventoryUnitRepository.findInventoryUnitById(unitId);
+        Integer amounts = Integer.parseInt(amountItems);
+        if (amounts == 0) {
+            Long id = inventoryUnitRepository.deleteInventoryUnitById(unitId);
+            logger.info("Удалена ячейка с id: " + id);
+            return InventoryUnitDto.fromUser(inventoryUnit); //TODO Реализовать грамотное возвращение в постмане
+        } else {
+            inventoryUnit.setAmountItems(amountItems);
+            InventoryUnit savedUnit = inventoryUnitRepository.save(inventoryUnit);
+            logger.info("В ячейке " + inventoryUnit.getId() + " изменено количество Item :" + amountItems);
+            return InventoryUnitDto.fromUser(savedUnit);
+        }
     }
 }
