@@ -1,6 +1,7 @@
 package com.example.project.controllers;
 
 import com.example.project.dto.ApiResponse;
+import com.example.project.payload.DeliveryRequest;
 import com.example.project.payload.LogOutRequest;
 import com.example.project.security.JwtUser;
 import com.example.project.services.UserInventoryService;
@@ -110,6 +111,20 @@ public class UserController {
                                             @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
 
         return ResponseEntity.ok().body(userInventoryService.editUnit(unitId, amountItems));
+    }
+
+    /**
+     * Оформить доставку
+     */
+    @PostMapping("/inventory/delivery")
+    @PreAuthorize("hasRole('USER')")
+    //@ApiOperation(value = "Logout")
+    public ResponseEntity arrangeDelivery(@RequestBody DeliveryRequest deliveryRequest,
+                                                   @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser
+                                 ) {
+
+        userService.arrangeInventoryDelivery(deliveryRequest, jwtUser);
+        return ResponseEntity.ok(new ApiResponse(true, "Доставка оформленна") );
     }
 
 

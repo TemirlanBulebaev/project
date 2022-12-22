@@ -8,8 +8,11 @@ import com.example.project.entities.*;
 import com.example.project.event.UserLogoutSuccess;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.exceptions.UserLogoutException;
+import com.example.project.payload.DeliveryRequest;
 import com.example.project.payload.LogOutRequest;
 import com.example.project.payload.RegistrationRequest;
+import com.example.project.repositories.InventoryUnitRepository;
+import com.example.project.repositories.UserDeliveryRepository;
 import com.example.project.repositories.UserRepository;
 import com.example.project.security.JwtUser;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +42,8 @@ public class UserService {
 
     private final UserInventoryService userInventoryService;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final InventoryUnitRepository inventoryUnitRepository;
+    private final UserDeliveryRepository userDeliveryRepository;
 
     @Autowired
     public UserService(
@@ -48,7 +53,7 @@ public class UserService {
             UserDeviceService userDeviceService,
             RefreshTokenService refreshTokenService,
             UserInventoryService userInventoryService,
-            ApplicationEventPublisher applicationEventPublisher) {
+            ApplicationEventPublisher applicationEventPublisher, InventoryUnitRepository inventoryUnitRepository, UserDeliveryRepository userDeliveryRepository) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
@@ -56,6 +61,9 @@ public class UserService {
         this.refreshTokenService = refreshTokenService;
         this.userInventoryService = userInventoryService;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.inventoryUnitRepository = inventoryUnitRepository;
+
+        this.userDeliveryRepository = userDeliveryRepository;
     }
 
     /**
@@ -193,6 +201,17 @@ public class UserService {
     public Optional<UserInventoryDto> getUserInventory(JwtUser jwtUser) {
         User user = findByUsername(jwtUser.getUsername());
         return Optional.of(userInventoryService.getUserInventory(user));
+    }
+
+    public void arrangeInventoryDelivery(DeliveryRequest deliveryRequest, JwtUser jwtUser) {
+        UserDelivery userDelivery = new UserDelivery();
+        Long inventoryId = jwtUser.getUserInventory().getId();
+        userDelivery.setAddress(deliveryRequest.getAddress());
+        userDelivery.setPayment(deliveryRequest.getPayment());
+        UserDelivery savedUserDelivery = userDeliveryRepository.save(userDelivery);
+        Set<InventoryUnit> inventoryUnits = inventoryUnitRepository.findInventoryUnitsById(inventoryId);
+        inventoryUnits.stream()
+                .map(unit -> new InventoryUnit(savedUserDelivery.getId()));
     }
 }
 
