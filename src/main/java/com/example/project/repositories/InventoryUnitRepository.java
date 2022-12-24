@@ -9,5 +9,5 @@ public interface InventoryUnitRepository extends JpaRepository<InventoryUnit, Lo
     InventoryUnit findInventoryUnitById(Long unitId);
     Long deleteInventoryUnitById(Long unitId);
 
-    Set<InventoryUnit> findInventoryUnitsById(Long id);
+    Set<InventoryUnit> findInventoryUnitsByUserInventoryId(Long id);
 }

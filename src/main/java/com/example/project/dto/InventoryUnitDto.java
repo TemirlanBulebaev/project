@@ -13,9 +13,11 @@ public class InventoryUnitDto {
 
     public static InventoryUnitDto fromUser (InventoryUnit inventoryUnit) {
         InventoryUnitDto inventoryUnitDto = new InventoryUnitDto();
-        inventoryUnitDto.setAmountItems(inventoryUnit.getAmountItems());
-        inventoryUnitDto.setId(inventoryUnit.getId());
-        inventoryUnitDto.setItem(ItemDtoFromUnit.fromUnit(inventoryUnit.getItem()));
+        if (!inventoryUnit.getOrdered()) {
+            inventoryUnitDto.setAmountItems(inventoryUnit.getAmountItems());
+            inventoryUnitDto.setId(inventoryUnit.getId());
+            inventoryUnitDto.setItem(ItemDtoFromUnit.fromUnit(inventoryUnit.getItem()));
+        }
         return inventoryUnitDto;
     }
 

@@ -56,6 +56,12 @@ public class InventoryUnit extends DateAudit {
         this.deliveryId = id;
     }
 
+    public static InventoryUnit delivery(UserDelivery savedUserDelivery, InventoryUnit unit) {
+        unit.setDeliveryId(savedUserDelivery.getId());
+        unit.setOrdered(true);
+        return unit;
+    }
+
     public Long getId() {
         return id;
     }

@@ -4,11 +4,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class DeliveryRequest {
-    @NotNull(message = "Item name cannot be null")
-    @NotBlank(message = "Item name cannot be blank")
+
     private String address;
-    @NotNull(message = "Item name cannot be null")
-    @NotBlank(message = "Item name cannot be blank")
     private Boolean isPayment;
 
     public DeliveryRequest() {
@@ -27,11 +24,11 @@ public class DeliveryRequest {
         this.address = address;
     }
 
-    public Boolean getPayment() {
+    public Boolean getisPayment() {
         return isPayment;
     }
 
-    public void setPayment(Boolean payment) {
+    public void setisPayment(Boolean payment) {
         isPayment = payment;
     }
 

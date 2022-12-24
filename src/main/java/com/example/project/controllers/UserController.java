@@ -100,7 +100,6 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     //@ApiOperation(value = "Получение своего инвенторя")
     public ResponseEntity getUserInventory (@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
-
         return ResponseEntity.ok().body(userService.getUserInventory(jwtUser));
     }
 
@@ -120,7 +119,7 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     //@ApiOperation(value = "Logout")
     public ResponseEntity arrangeDelivery(@RequestBody DeliveryRequest deliveryRequest,
-                                                   @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser
+                                          @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser
                                  ) {
 
         userService.arrangeInventoryDelivery(deliveryRequest, jwtUser);

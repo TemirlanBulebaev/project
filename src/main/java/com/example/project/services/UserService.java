@@ -1,9 +1,6 @@
 package com.example.project.services;
 
-import com.example.project.dto.InventoryUnitDto;
-import com.example.project.dto.UserDto;
-import com.example.project.dto.UserInventoryDto;
-import com.example.project.dto.UserProfileDto;
+import com.example.project.dto.*;
 import com.example.project.entities.*;
 import com.example.project.event.UserLogoutSuccess;
 import com.example.project.exceptions.ResourceNotFoundException;
@@ -204,14 +201,19 @@ public class UserService {
     }
 
     public void arrangeInventoryDelivery(DeliveryRequest deliveryRequest, JwtUser jwtUser) {
-        UserDelivery userDelivery = new UserDelivery();
         Long inventoryId = jwtUser.getUserInventory().getId();
-        userDelivery.setAddress(deliveryRequest.getAddress());
-        userDelivery.setPayment(deliveryRequest.getPayment());
-        UserDelivery savedUserDelivery = userDeliveryRepository.save(userDelivery);
-        Set<InventoryUnit> inventoryUnits = inventoryUnitRepository.findInventoryUnitsById(inventoryId);
-        inventoryUnits.stream()
-                .map(unit -> new InventoryUnit(savedUserDelivery.getId()));
+        Set<InventoryUnit> inventoryUnits = inventoryUnitRepository.findInventoryUnitsByUserInventoryId(inventoryId);
+        inventoryUnits.stream().forEach(unit -> {
+            if (!unit.getOrdered()) {
+                UserDelivery userDelivery = new UserDelivery();
+                userDelivery.setAddress(deliveryRequest.getAddress());
+                userDelivery.setPayment(deliveryRequest.getisPayment());
+                UserDelivery savedUserDelivery = userDeliveryRepository.save(userDelivery);
+                unit.setDeliveryId(savedUserDelivery.getId());
+                unit.setOrdered(true);
+                inventoryUnitRepository.save(unit);
+            }
+        });
     }
 }
 
