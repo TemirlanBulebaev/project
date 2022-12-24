@@ -36,7 +36,7 @@ public class UserController {
      * @param jwtUser
      * @return
      */
-    @GetMapping("/profile")
+    @GetMapping("/profile") //TODO расширить информацию
     @PreAuthorize("hasRole('USER')")
     //@ApiOperation(value = "Получение свего профиля." +
             //" В профиле отражена информация о самом пользователе, его балансе $ и баланс внутренних валют.")
@@ -52,7 +52,7 @@ public class UserController {
      * @param jwtUser
      * @return
      */
-    @GetMapping("/{username}")
+    @GetMapping("/{username}")//TODO Расширить возможности
     @PreAuthorize("hasRole('ADMIN')")
     //@ApiOperation(value = "Получение информации о пользователе" +
             //"Доступно всем авторизованным пользователяим")
@@ -68,7 +68,7 @@ public class UserController {
      * @param jwtUser
      * @return
      */
-    @GetMapping("/all")
+    @GetMapping("/all")//готов
     @PreAuthorize("hasRole('ADMIN')")
     //@ApiOperation(value = "Получение списка всех пользователей")
     public ResponseEntity getAllUsers (@AuthenticationPrincipal JwtUser jwtUser) {
@@ -83,7 +83,7 @@ public class UserController {
      * @param logOutRequest
      * @return
      */
-    @PostMapping("/logout")
+    @PostMapping("/logout")//TODO перепроверить логику работы
     @PreAuthorize("hasRole('USER')")
     //@ApiOperation(value = "Logout")
     public ResponseEntity logout(@AuthenticationPrincipal JwtUser jwtUser,

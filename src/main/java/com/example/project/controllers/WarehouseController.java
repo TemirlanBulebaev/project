@@ -56,7 +56,7 @@ public class WarehouseController {
     /**
      * Получение всех позиций зеленого кофе
      */
-    @GetMapping("/green/all")
+    @GetMapping("/green/all") //Готов
     public ResponseEntity getGreenCoffees(@AuthenticationPrincipal JwtUser jwtUser) {
 
         return ResponseEntity.ok().body(greenCoffeeService.getGreenCoffees());

@@ -13,13 +13,13 @@ public class GreenCoffeeRequest {
     private Long weight;//g
 
     @NotNull(message = "Description cannot be blank")
-    private Integer waterLoss;
+    private Integer waterLoss;// %
 
     @NotNull(message = "Description cannot be blank")
-    private Integer density;
+    private Integer density;// g/L
 
     @NotNull(message = "Description cannot be blank")
-    private Integer humidity;
+    private Integer humidity; //%
 
     public GreenCoffeeRequest() {
     }

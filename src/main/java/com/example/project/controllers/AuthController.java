@@ -50,7 +50,7 @@ public class AuthController {
      * (Опубликовать событие для создания токена подверждения электронной почты)
      * registerAsAdmin": "true" - зарегистрировать администратором
      */
-        @PostMapping("/registration")
+        @PostMapping("/registration") //готов
     public ResponseEntity registrationUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
             return authService.registrationUser(registrationRequest)
                         .map(savedNewUser -> {
@@ -68,7 +68,7 @@ public class AuthController {
     /**
      * Подтверждение учетной записи
      */
-    @GetMapping("/registrationConfirmation")
+    @GetMapping("/registrationConfirmation")//готов
     public ResponseEntity confirmRegistration(@RequestParam("token") String token) {
 
         return authService.confirmEmailRegistration(token)
@@ -80,7 +80,7 @@ public class AuthController {
     /**
      * Вход по почте, паролю и устройству
      */
-    @PostMapping("/login")
+    @PostMapping("/login")//готов
     public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authService.authenticateUser(loginRequest)
                 .orElseThrow(() -> new UserLoginException("аутентификации", loginRequest.getEmail()));
