@@ -28,13 +28,20 @@ public class PackageService {
     /**
      * Добавить упакову на склад
      */
-    public Object addPackage(PackageRequest packageRequest) {
-        Package newPackage = new Package();
-        newPackage.setName(packageRequest.getName());
-        newPackage.setAmount(packageRequest.getAmount());
-        Package savedPackage = savePackage(newPackage);
-        logger.info("На склад добавлен :" + savedPackage.getName());
-        return Optional.of(savedPackage);
+    public Object addPackage(PackageRequest packageRequest) { //TODO добавить логи и ошибку о несуществовании
+        if (packageRepository.existsByName(packageRequest.getName())){
+            Package existPackage = packageRepository.findByName(packageRequest.getName());
+            existPackage.setAmount(existPackage.getAmount() + packageRequest.getAmount());
+            Package editPackage = packageRepository.save(existPackage);
+            return Optional.of(editPackage);
+        } else {
+            Package newPackage = new Package();
+            newPackage.setName(packageRequest.getName());
+            newPackage.setAmount(packageRequest.getAmount());
+            Package savedPackage = savePackage(newPackage);
+            logger.info("На склад добавлен :" + savedPackage.getName());
+            return Optional.of(savedPackage);
+        }
     }
     /**
      * Сохранение упаковки в базе

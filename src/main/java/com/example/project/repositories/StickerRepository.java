@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StickerRepository extends JpaRepository<Sticker, Long> {
 
     Sticker findByName(StickerType stickerType);
+    Boolean existsByName(StickerType stickerType);
 }

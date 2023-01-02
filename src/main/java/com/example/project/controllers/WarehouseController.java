@@ -38,7 +38,7 @@ public class WarehouseController {
     /**
      * Добавить позицию зеленого кофе
      */
-    @PostMapping("/addGreen")
+    @PostMapping("/addGreen")//готов
     public ResponseEntity addGreenCoffee(@Valid @RequestBody GreenCoffeeRequest greenCoffeeRequest) {
         return ResponseEntity.ok().body(greenCoffeeService.addGreenCoffee(greenCoffeeRequest));
     }
@@ -46,7 +46,7 @@ public class WarehouseController {
     /**
      * Получение позции по id
      */
-    @GetMapping("/green/{id}")
+    @GetMapping("/green/{id}")//готов
     public ResponseEntity getGreenCoffee(@PathVariable(value = "id") Long id,
                                   @AuthenticationPrincipal JwtUser jwtUser) {
 
@@ -80,7 +80,7 @@ public class WarehouseController {
     public ResponseEntity deleteItem(@PathVariable(value = "id") Long id,
                                      @AuthenticationPrincipal JwtUser jwtUser) {
         greenCoffeeService.deleteGreenCoffee(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Позиция " + id + " была удалена"));
+        return ResponseEntity.ok(new ApiResponse(true, "Позиция c  " + id + " была удалена"));
     }
 
     /**
@@ -92,6 +92,15 @@ public class WarehouseController {
                                            @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
         return ResponseEntity.ok().body(roastedCoffeeService.addRoastCoffee(id, amountBatch));
     }
+
+    /**
+     * Посмотреть остатки жаренного кофе на складе
+     */
+    @GetMapping("/roasted/all")
+    public ResponseEntity getRoastedCoffee(@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
+        return ResponseEntity.ok().body(roastedCoffeeService.getRoastedCoffee());
+    }
+
 
 
 

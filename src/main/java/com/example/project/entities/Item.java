@@ -40,6 +40,7 @@ public class Item extends DateAudit {
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean active;
 
+
     public Item() {
         super();
     }

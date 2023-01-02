@@ -31,13 +31,20 @@ public class StickerService {
     /**
      * Добавить наклейку на склад
      */
-    public Object addSticker(StickerRequest stickerRequest) {
-        Sticker newSticker = new Sticker();
-        newSticker.setName(stickerRequest.getName());
-        newSticker.setAmount(stickerRequest.getAmount());
-        Sticker savedSticker = saveSticker(newSticker);
-        logger.info("На склад добавлен :" + savedSticker.getName());
-        return Optional.of(savedSticker);
+    public Object addSticker(StickerRequest stickerRequest) {//TODO Сделать логи и ошибку при некорректном добавлении стикера
+        if (stickerRepository.existsByName(stickerRequest.getName())) {
+            Sticker existSticker = stickerRepository.findByName(stickerRequest.getName());
+            existSticker.setAmount(existSticker.getAmount()+stickerRequest.getAmount());
+            Sticker editSticker = stickerRepository.save(existSticker);
+            return Optional.of(editSticker);
+        } else {
+            Sticker newSticker = new Sticker();
+            newSticker.setName(stickerRequest.getName());
+            newSticker.setAmount(stickerRequest.getAmount());
+            Sticker savedSticker = saveSticker(newSticker);
+            logger.info("На склад добавлен :" + savedSticker.getName());
+            return Optional.of(savedSticker);
+        }
     }
 
     private Sticker saveSticker(Sticker newSticker) {

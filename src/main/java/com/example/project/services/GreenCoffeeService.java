@@ -1,6 +1,7 @@
 package com.example.project.services;
 
 import com.example.project.entities.GreenCoffee;
+import com.example.project.exceptions.AlreadyGreenCoffeeException;
 import com.example.project.exceptions.AlreadyUserException;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.payload.EditGreenCoffeeRequest;
@@ -34,7 +35,7 @@ public class GreenCoffeeService {
         String coffeeName = greenCoffeeRequest.getName();
         if (greenCoffeeAlreadyExists(coffeeName)){
             logger.error("Позиция зеленого кофе " + coffeeName + " уже существует");
-            throw new AlreadyUserException("GreenCoffee", "Name", coffeeName);
+            throw new AlreadyGreenCoffeeException("GreenCoffee", "Name", coffeeName);
         }
         return addNewGreenCoffee(greenCoffeeRequest);
     }
@@ -75,20 +76,20 @@ public class GreenCoffeeService {
 
     public void deleteGreenCoffee(Long id) {
         GreenCoffee greenCoffee = findById(id);
-        logger.info("Позиция " + id + "была удалена");
+        logger.info("Позиция c id " + id + "была удалена");
         greenCoffeeRepository.deleteById(id);
     }
 
     GreenCoffee findById(Long id) {
         return greenCoffeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Позиция", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Эту позицию", "id", id));
     }
 
     public Object getGreenCoffee(Long id) {
         return findById(id);
     }
 
-    public Optional editGreenCoffee(Long id, EditGreenCoffeeRequest editGreenCoffeeRequest) {
+    public Optional<GreenCoffee> editGreenCoffee(Long id, EditGreenCoffeeRequest editGreenCoffeeRequest) {
         GreenCoffee greenCoffee = findById(id);
         greenCoffee.setName(editGreenCoffeeRequest.getName());
         greenCoffee.setWeight(editGreenCoffeeRequest.getWeight());
