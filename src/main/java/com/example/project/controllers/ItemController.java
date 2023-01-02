@@ -39,6 +39,17 @@ public class ItemController {
     }
 
     /**
+     * Добавить количество существующего товара
+     */
+    @PostMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity addAmountItem(@PathVariable(value = "id") Long id,
+                                        @RequestParam String amountItem,
+                                        @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
+        return ResponseEntity.ok().body(itemService.addAmountItem(id, amountItem));
+    }
+
+    /**
      * Получение Items
      */
     @GetMapping("/all")
@@ -100,7 +111,5 @@ public class ItemController {
 
         return ResponseEntity.ok().body(itemService.editItem(id, editItemRequest));
     }
-
-
 }
 

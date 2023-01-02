@@ -36,6 +36,8 @@ public class Item extends DateAudit {
     @Column(name = "PRICE")
     private Long price;
 
+    @Column(name = "AMOUNT")
+    private Long amount;
 
     @Column(name = "IS_ACTIVE", nullable = false)
     private Boolean active;
@@ -45,7 +47,14 @@ public class Item extends DateAudit {
         super();
     }
 
-    public Item(Long id, String name, String coffeeName, String description, Integer weight, Long price, Boolean active) {
+    public Item(Long id,
+                String name,
+                String coffeeName,
+                String description,
+                Integer weight,
+                Long price,
+                Long amount,
+                Boolean active) {
         this.id = id;
         this.name = name;
         this.coffeeName = coffeeName;
@@ -54,6 +63,7 @@ public class Item extends DateAudit {
         setPackageType(weight);
         setStickerType(weight);
         this.price = price;
+        this.amount = amount;
         this.active = active;
     }
 
@@ -132,7 +142,7 @@ public class Item extends DateAudit {
         return stickerType;
     }
 
-    public void setStickerType(Integer weight) {
+    public void setStickerType(Integer weight) { //TODO Сделать через switch
         if (weight == 100) {
             this.stickerType = StickerType.STICKER_100;
         } if (weight == 250) {
@@ -140,5 +150,13 @@ public class Item extends DateAudit {
         } if (weight == 1000) {
             this.stickerType = StickerType.STICKER_1000;
         }
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 }

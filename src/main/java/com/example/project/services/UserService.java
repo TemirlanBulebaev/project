@@ -8,6 +8,7 @@ import com.example.project.exceptions.UserLogoutException;
 import com.example.project.payload.DeliveryRequest;
 import com.example.project.payload.LogOutRequest;
 import com.example.project.payload.RegistrationRequest;
+import com.example.project.repositories.DeliveryUnitRepository;
 import com.example.project.repositories.InventoryUnitRepository;
 import com.example.project.repositories.UserDeliveryRepository;
 import com.example.project.repositories.UserRepository;
@@ -41,6 +42,7 @@ public class UserService {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final InventoryUnitRepository inventoryUnitRepository;
     private final UserDeliveryRepository userDeliveryRepository;
+    private final DeliveryUnitRepository deliveryUnitRepository;
 
     @Autowired
     public UserService(
@@ -50,7 +52,7 @@ public class UserService {
             UserDeviceService userDeviceService,
             RefreshTokenService refreshTokenService,
             UserInventoryService userInventoryService,
-            ApplicationEventPublisher applicationEventPublisher, InventoryUnitRepository inventoryUnitRepository, UserDeliveryRepository userDeliveryRepository) {
+            ApplicationEventPublisher applicationEventPublisher, InventoryUnitRepository inventoryUnitRepository, UserDeliveryRepository userDeliveryRepository, DeliveryUnitRepository deliveryUnitRepository) {
         this.userRepository = userRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
@@ -61,6 +63,7 @@ public class UserService {
         this.inventoryUnitRepository = inventoryUnitRepository;
 
         this.userDeliveryRepository = userDeliveryRepository;
+        this.deliveryUnitRepository = deliveryUnitRepository;
     }
 
     /**
@@ -202,17 +205,19 @@ public class UserService {
 
     public void arrangeInventoryDelivery(DeliveryRequest deliveryRequest, JwtUser jwtUser) {
         Long inventoryId = jwtUser.getUserInventory().getId();
+        UserDelivery userDelivery = new UserDelivery();
+        userDelivery.setAddress(deliveryRequest.getAddress());
+        userDelivery.setComment(deliveryRequest.getComment());
+        userDelivery.setPayment(deliveryRequest.getisPayment());
+        userDeliveryRepository.save(userDelivery);
+
         Set<InventoryUnit> inventoryUnits = inventoryUnitRepository.findInventoryUnitsByUserInventoryId(inventoryId);
         inventoryUnits.stream().forEach(unit -> {
-            if (!unit.getOrdered()) {
-                UserDelivery userDelivery = new UserDelivery();
-                userDelivery.setAddress(deliveryRequest.getAddress());
-                userDelivery.setPayment(deliveryRequest.getisPayment());
-                UserDelivery savedUserDelivery = userDeliveryRepository.save(userDelivery);
-                unit.setDeliveryId(savedUserDelivery.getId());
-                unit.setOrdered(true);
-                inventoryUnitRepository.save(unit);
-            }
+            DeliveryUnit deliveryUnit = new DeliveryUnit();
+            deliveryUnit.setAmountItems(unit.getAmountItems());
+            deliveryUnit.setItem(unit.getItem());
+            deliveryUnit.setDeliveryId(userDelivery.getId());
+            deliveryUnitRepository.save(deliveryUnit);
         });
     }
 }

@@ -15,9 +15,6 @@ public class EditItemRequest {
     //@ApiModelProperty(value = "Описание Item", required = true, allowableValues = "NonEmpty String")
     private String description;
 
-    @NotNull(message = "Description cannot be blank")
-    private Integer weight;//g
-
     @NotNull(message = "One price must be specified")
     //@ApiModelProperty(value = "Цены во внутренней валюте для Item", required = true, allowableValues = "NonEmpty String")
     private Long price;
@@ -29,10 +26,9 @@ public class EditItemRequest {
     public EditItemRequest() {
     }
 
-    public EditItemRequest(String name, String description, Integer weight, Long price, Boolean active) {
+    public EditItemRequest(String name, String description, Long price, Boolean active) {
         this.name = name;
         this.description = description;
-        this.weight = weight;
         this.price = price;
         this.active = active;
     }
@@ -53,14 +49,6 @@ public class EditItemRequest {
         this.description = description;
     }
 
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
     public Long getPrice() {
         return price;
     }
@@ -77,15 +65,5 @@ public class EditItemRequest {
         this.active = active;
     }
 
-    @Override
-    public String toString() {
-        return "EditItemRequest{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", weight=" + weight +
-                ", price=" + price +
-                ", active=" + active +
-                '}';
-    }
 }
 

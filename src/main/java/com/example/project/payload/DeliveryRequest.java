@@ -6,13 +6,16 @@ import javax.validation.constraints.NotNull;
 public class DeliveryRequest {
 
     private String address;
+
+    private String comment;
     private Boolean isPayment;
 
     public DeliveryRequest() {
     }
 
-    public DeliveryRequest(String address, Boolean isPayment) {
+    public DeliveryRequest(String address, String comment, Boolean isPayment) {
         this.address = address;
+        this.comment = comment;
         this.isPayment = isPayment;
     }
 
@@ -32,11 +35,11 @@ public class DeliveryRequest {
         isPayment = payment;
     }
 
-    @Override
-    public String toString() {
-        return "DeliveryRequest{" +
-                "address='" + address + '\'' +
-                ", isPayment=" + isPayment +
-                '}';
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

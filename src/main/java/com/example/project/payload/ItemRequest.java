@@ -27,7 +27,19 @@ public class ItemRequest {
     //@ApiModelProperty(value = "Цены во внутренней валюте для Item", required = true, allowableValues = "NonEmpty String")
     private Long price;
 
+    @NotNull
+    private Long amount;
+
     public ItemRequest() {
+    }
+
+    public ItemRequest(String name, String coffeeName, String description, Integer weight, Long price, Long amount) {
+        this.name = name;
+        this.coffeeName = coffeeName;
+        this.description = description;
+        this.weight = weight;
+        this.price = price;
+        this.amount = amount;
     }
 
     public String getName() {
@@ -70,14 +82,12 @@ public class ItemRequest {
         this.weight = weight;
     }
 
-    @Override
-    public String toString() {
-        return "ItemRequest{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", weight=" + weight +
-                ", price=" + price +
-                '}';
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 }
 

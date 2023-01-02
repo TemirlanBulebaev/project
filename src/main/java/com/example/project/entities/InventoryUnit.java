@@ -4,6 +4,7 @@ import com.example.project.entities.audit.DateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "INVENTORY_UNIT")
@@ -27,12 +28,6 @@ public class InventoryUnit extends DateAudit {
     @JoinColumn (name = "INVENTORY_ID", insertable = false)
     private UserInventory userInventory;
 
-    @Column(name = "IS_ORDERED")
-    private Boolean isOrdered;//Заказано
-
-    @Column(name = "DELIVERY_ID")
-    private Long deliveryId;
-
 
     public InventoryUnit() {
         super();
@@ -41,25 +36,11 @@ public class InventoryUnit extends DateAudit {
     public InventoryUnit(Long id,
                          String amountItems,
                          Item item,
-                         UserInventory userInventory,
-                         Long deliveryId) {
+                         UserInventory userInventory) {
         this.id = id;
         this.amountItems = amountItems;
         this.item = item;
         this.userInventory = userInventory;
-        this.isOrdered = false;
-        this.deliveryId = deliveryId;
-    }
-
-    public InventoryUnit(Long id){
-        this.isOrdered = true;
-        this.deliveryId = id;
-    }
-
-    public static InventoryUnit delivery(UserDelivery savedUserDelivery, InventoryUnit unit) {
-        unit.setDeliveryId(savedUserDelivery.getId());
-        unit.setOrdered(true);
-        return unit;
     }
 
     public Long getId() {
@@ -92,21 +73,5 @@ public class InventoryUnit extends DateAudit {
 
     public void setUserInventory(UserInventory userInventory) {
         this.userInventory = userInventory;
-    }
-
-    public Boolean getOrdered() {
-        return isOrdered;
-    }
-
-    public void setOrdered(Boolean isOrdered) {
-        this.isOrdered = isOrdered;
-    }
-
-    public Long getDeliveryId() {
-        return deliveryId;
-    }
-
-    public void setDeliveryId(Long deliveryId) {
-        this.deliveryId = deliveryId;
     }
 }

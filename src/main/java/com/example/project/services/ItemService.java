@@ -2,9 +2,9 @@ package com.example.project.services;
 
 import com.example.project.dto.InventoryUnitDto;
 import com.example.project.dto.ItemDto;
-import com.example.project.dto.UserInventoryDto;
 import com.example.project.entities.*;
 import com.example.project.entities.Package;
+import com.example.project.exceptions.NotEnoughException;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.payload.EditItemRequest;
 import com.example.project.payload.ItemRequest;
@@ -54,7 +54,6 @@ public class ItemService {
      * Добавление Item
      */
     public Optional<Item> addItem(ItemRequest itemRequest) {
-
         Item newItem = new Item();
         Integer weight = itemRequest.getWeight();
         newItem.setName(itemRequest.getName());
@@ -64,29 +63,41 @@ public class ItemService {
         newItem.setPackageType(weight);
         newItem.setStickerType(weight);
         newItem.setPrice(itemRequest.getPrice());
+        newItem.setAmount(itemRequest.getAmount());
         newItem.setActive(true);
+        reduceConsumables(newItem, itemRequest.getAmount());//расходники
         Item savedItem = saveItem(newItem);
-        reduceConsumables(savedItem);//расходники
         logger.info("Создан новый товар :" + savedItem.getName());
         return Optional.of(savedItem);
     }
 
+
+
     /**
      * Списание расходников
      */
-    private void reduceConsumables(Item savedItem){//расходники
-        PackageType packageType = savedItem.getPackageType();
-        StickerType stickerType =savedItem.getStickerType();
-        String coffee = savedItem.getCoffeeName();
+    private void reduceConsumables(Item newItem, Long amount){//расходники TODO Возможно декомпозировать
+        PackageType packageType = newItem.getPackageType();
+        StickerType stickerType = newItem.getStickerType();
+        String coffee = newItem.getCoffeeName();
+
         Package warehousePackage = packageRepository.findByName(packageType);
-        warehousePackage.setAmount(warehousePackage.getAmount()-1);
-        packageRepository.save(warehousePackage);
+        if (!((warehousePackage.getAmount() - 1) * amount < 0)) {
+            warehousePackage.setAmount(warehousePackage.getAmount() - 1);
+            packageRepository.save(warehousePackage);
+        } else throw new NotEnoughException("Упаковки", warehousePackage.getName().name(), warehousePackage.getAmount());
+
         Sticker warehouseSticker = stickerRepository.findByName(stickerType);
-        warehouseSticker.setAmount(warehouseSticker.getAmount()-1);
-        stickerRepository.save(warehouseSticker);
+        if (!((warehouseSticker.getAmount() -1) * amount < 0)) {
+            warehouseSticker.setAmount(warehouseSticker.getAmount() - 1);
+            stickerRepository.save(warehouseSticker);
+        } else throw new NotEnoughException("Наклейки", warehouseSticker.getName().name(), warehouseSticker.getAmount());
+
         RoastedCoffee roastedCoffee = roastedCoffeeRepository.findByName(coffee);
-        roastedCoffee.setWeight(roastedCoffee.getWeight() - savedItem.getWeight());
-        roastedCoffeeRepository.save(roastedCoffee);
+        if (!(roastedCoffee.getWeight() - (newItem.getWeight()*amount) < 0)) {
+            roastedCoffee.setWeight(roastedCoffee.getWeight() - newItem.getWeight());
+            roastedCoffeeRepository.save(roastedCoffee);
+        } else throw new NotEnoughException("Жареного кофе", roastedCoffee.getName(), roastedCoffee.getWeight());
     }
 
         private Item saveItem(Item Item) {
@@ -185,12 +196,11 @@ public class ItemService {
     /**
      * Изменение Item
      */
-    public Optional<Item> editItem(long id, EditItemRequest editItemRequest) {
+    public Optional<Item> editItem(Long id, EditItemRequest editItemRequest) {
 
         Item Item = findById(id);
         Item.setName(editItemRequest.getName());
         Item.setDescription(editItemRequest.getDescription());
-        Item.setWeight(editItemRequest.getWeight());
         Item.setPrice(editItemRequest.getPrice());
         Item.setActive(editItemRequest.getActive());
         saveItem(Item);
@@ -205,5 +215,18 @@ public class ItemService {
 
         Item item = findById(itemId);
         return userService.getSavedInventoryUnit(jwtUser, amountItems, item);
+    }
+
+    /**
+     * Добавить количество item по id
+     */
+    public Optional<Item> addAmountItem(Long id, String amountItem) {
+        Long amount = Long.parseLong(amountItem);
+        Item item = itemRepository.findById(id).get();
+        item.setAmount(item.getAmount()+amount);
+        reduceConsumables(item, amount);
+        Item editItem = itemRepository.save(item);
+        return Optional.of(editItem);
+
     }
 }

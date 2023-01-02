@@ -1,7 +1,6 @@
 package com.example.project.entities;
 
 import com.example.project.entities.audit.DateAudit;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,24 +11,29 @@ import java.util.Set;
 public class UserDelivery extends DateAudit {
 
     @Id
-    @Column(name = "DELIVERY_ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "delivery_seq")
-    @SequenceGenerator(name = "delivery_seq", allocationSize = 1)
+    @Column(name = "USER_DELIVERY_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_delivery_seq")
+    @SequenceGenerator(name = "user_delivery_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "ADDRESS")
     private String address;
 
+    @Column(name = "COMMENT", columnDefinition = "text")
+    private String comment;
+
     @Column(name = "IS_PAYMENT")
     private Boolean isPayment;// Оплачено
+
 
     public UserDelivery() {
         super();
     }
 
-    public UserDelivery(Long id, String address, Boolean isPayment) {
+    public UserDelivery(Long id, String address, String comment, Boolean isPayment) {
         this.id = id;
         this.address = address;
+        this.comment = comment;
         this.isPayment = isPayment;
     }
 
@@ -56,4 +60,13 @@ public class UserDelivery extends DateAudit {
     public void setPayment(Boolean payment) {
         isPayment = payment;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
 }
