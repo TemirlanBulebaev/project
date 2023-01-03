@@ -203,12 +203,18 @@ public class UserService {
         return Optional.of(userInventoryService.getUserInventory(user));
     }
 
+    /**
+     * Оформить доставку
+     */
     public void arrangeInventoryDelivery(DeliveryRequest deliveryRequest, JwtUser jwtUser) {
         Long inventoryId = jwtUser.getUserInventory().getId();
+        String username = jwtUser.getUsername();
+        User user = findByUsername(username);
         UserDelivery userDelivery = new UserDelivery();
         userDelivery.setAddress(deliveryRequest.getAddress());
         userDelivery.setComment(deliveryRequest.getComment());
         userDelivery.setPayment(deliveryRequest.getisPayment());
+        userDelivery.setUserInventoryID(user.getUserInventory().getId());
         userDeliveryRepository.save(userDelivery);
 
         Set<InventoryUnit> inventoryUnits = inventoryUnitRepository.findInventoryUnitsByUserInventoryId(inventoryId);
@@ -216,9 +222,37 @@ public class UserService {
             DeliveryUnit deliveryUnit = new DeliveryUnit();
             deliveryUnit.setAmountItems(unit.getAmountItems());
             deliveryUnit.setItem(unit.getItem());
-            deliveryUnit.setDeliveryId(userDelivery.getId());
+            deliveryUnit.setDeliveryID(userDelivery.getId());
             deliveryUnitRepository.save(deliveryUnit);
+            deleteInventoryUnit(unit);
+
         });
+    }
+
+    private void deleteInventoryUnit(InventoryUnit inventoryUnit){
+        inventoryUnitRepository.delete(inventoryUnit);
+    }
+
+    /**
+     * Посмотреть все доставки
+     */
+    public List<UserDelivery> findAllDelivery(JwtUser jwtUser) {
+        String username = jwtUser.getUsername();
+        User user = findByUsername(username);
+        UserInventory userInventory = user.getUserInventory();
+        Long userInventoryId = userInventory.getId();
+        List<UserDelivery> userDelivery = userDeliveryRepository.findAllByUserInventoryID(userInventoryId);
+        return userDelivery;
+    }
+
+    public Optional<UserDelivery> findDeliveryById(Long deliveryId, JwtUser jwtUser) {
+        String username = jwtUser.getUsername();
+        User user = findByUsername(username);
+        UserInventory userInventory = user.getUserInventory();
+        Long userInventoryId = userInventory.getId();
+        UserDelivery userDelivery = userDeliveryRepository.findUserDeliveryById(deliveryId);
+        return Optional.of(userDelivery);
+
     }
 }
 

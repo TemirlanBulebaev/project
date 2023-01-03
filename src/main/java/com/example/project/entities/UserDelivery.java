@@ -1,6 +1,7 @@
 package com.example.project.entities;
 
 import com.example.project.entities.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,7 +12,7 @@ import java.util.Set;
 public class UserDelivery extends DateAudit {
 
     @Id
-    @Column(name = "USER_DELIVERY_ID")
+    @Column(name = "DELIVERY_ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_delivery_seq")
     @SequenceGenerator(name = "user_delivery_seq", allocationSize = 1)
     private Long id;
@@ -25,16 +26,25 @@ public class UserDelivery extends DateAudit {
     @Column(name = "IS_PAYMENT")
     private Boolean isPayment;// Оплачено
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "DELIVERY_ID")
+    private Set<DeliveryUnit> inventoryUnit = new HashSet<>();
+
+    @Column(name = "USER_INVENTORY_ID")
+    private Long userInventoryID;
+
 
     public UserDelivery() {
         super();
     }
 
-    public UserDelivery(Long id, String address, String comment, Boolean isPayment) {
+    public UserDelivery(Long id, String address, String comment, Boolean isPayment, Set<DeliveryUnit> inventoryUnit, Long userInventoryID) {
         this.id = id;
         this.address = address;
         this.comment = comment;
         this.isPayment = isPayment;
+        this.inventoryUnit = inventoryUnit;
+        this.userInventoryID = userInventoryID;
     }
 
     public Long getId() {
@@ -69,4 +79,19 @@ public class UserDelivery extends DateAudit {
         this.comment = comment;
     }
 
+    public Set<DeliveryUnit> getInventoryUnit() {
+        return inventoryUnit;
+    }
+
+    public void setInventoryUnit(Set<DeliveryUnit> inventoryUnit) {
+        this.inventoryUnit = inventoryUnit;
+    }
+
+    public Long getUserInventoryID() {
+        return userInventoryID;
+    }
+
+    public void setUserInventoryID(Long userInventoryID) {
+        this.userInventoryID = userInventoryID;
+    }
 }

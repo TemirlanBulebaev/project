@@ -1,6 +1,7 @@
 package com.example.project.entities;
 
 import com.example.project.entities.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -22,18 +23,18 @@ public class DeliveryUnit extends DateAudit {
     @JoinColumn(name = "ITEM_ID", referencedColumnName = "ITEM_ID")
     private Item item;
 
-    @Column(name = "USER_DELIVERY_ID")
-    private Long deliveryId;
+    @Column(name = "DELIVERY_ID")
+    private Long deliveryID;
 
     public DeliveryUnit() {
         super();
     }
 
-    public DeliveryUnit(Long id, String amountItems, Item item, Long deliveryId) {
+    public DeliveryUnit(Long id, String amountItems, Item item, Long deliveryID) {
         this.id = id;
         this.amountItems = amountItems;
         this.item = item;
-        this.deliveryId = deliveryId;
+        this.deliveryID = deliveryID;
     }
 
     public Long getId() {
@@ -60,11 +61,11 @@ public class DeliveryUnit extends DateAudit {
         this.item = item;
     }
 
-    public Long getDeliveryId() {
-        return deliveryId;
+    public Long getDeliveryID() {
+        return deliveryID;
     }
 
-    public void setDeliveryId(Long deliveryId) {
-        this.deliveryId = deliveryId;
+    public void setDeliveryID(Long deliveryID) {
+        this.deliveryID = deliveryID;
     }
 }

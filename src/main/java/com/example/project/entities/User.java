@@ -41,7 +41,7 @@ public class User extends DateAudit {
     @Column(name = "IS_EMAIL_VERIFIED", nullable = false)
     private Boolean isEmailVerified;
 
-    //@JsonIgnore
+    @JsonIgnore
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name ="INVENTORY_ID", unique = true)
     private UserInventory userInventory;

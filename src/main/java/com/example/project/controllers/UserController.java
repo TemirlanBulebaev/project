@@ -121,10 +121,35 @@ public class UserController {
     public ResponseEntity arrangeDelivery(@RequestBody DeliveryRequest deliveryRequest,
                                           @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser
                                  ) {
-
         userService.arrangeInventoryDelivery(deliveryRequest, jwtUser);
         return ResponseEntity.ok(new ApiResponse(true, "Доставка оформленна") );
     }
+
+    /**
+     * Посмотреть историю доставок
+     */
+    @GetMapping("/inventory/delivery/history/all")
+    @PreAuthorize("hasRole('USER')")
+    //@ApiOperation(value = "Получение списка всех пользователей")
+    public ResponseEntity getAllDelivery(@AuthenticationPrincipal JwtUser jwtUser) {
+
+        return ResponseEntity.ok().body(userService.findAllDelivery(jwtUser));
+    }
+
+
+    /**
+     * Посмотреть историю доставки по id
+     */
+    @GetMapping("/inventory/delivery/history/{id}")
+    @PreAuthorize("hasRole('USER')")
+    //@ApiOperation(value = "Получение списка всех пользователей")
+    public ResponseEntity getAllDelivery(@PathVariable(value = "id") Long deliveryId,
+                                         @AuthenticationPrincipal JwtUser jwtUser) {
+
+        return ResponseEntity.ok().body(userService.findDeliveryById(deliveryId, jwtUser));
+    }
+
+
 
 
 }
