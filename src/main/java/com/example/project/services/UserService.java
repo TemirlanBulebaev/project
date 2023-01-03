@@ -4,6 +4,7 @@ import com.example.project.dto.*;
 import com.example.project.entities.*;
 import com.example.project.event.UserLogoutSuccess;
 import com.example.project.exceptions.InventoryIsEmptyException;
+import com.example.project.exceptions.NotEnoughException;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.exceptions.UserLogoutException;
 import com.example.project.payload.DeliveryRequest;
@@ -226,10 +227,27 @@ public class UserService {
                 deliveryUnit.setAmountItems(unit.getAmountItems());
                 deliveryUnit.setItem(unit.getItem());
                 deliveryUnit.setDeliveryID(userDelivery.getId());
+                reduceItem(deliveryUnit.getItem(), deliveryUnit.getAmountItems());
                 deliveryUnitRepository.save(deliveryUnit);
                 deleteInventoryUnit(unit);
+
             });
+
+
         }else throw new InventoryIsEmptyException("Корзина");
+    }
+
+    private void reduceItem(Item item, String amountItems) {
+        Long amount = Long.parseLong(amountItems);
+        Long newAmount = item.getAmount()-amount;
+        if (newAmount < 0) {
+            throw new NotEnoughException("Товара", item.getName(), item );
+        } else {
+            if (newAmount == 0) {
+                item.setAmount(newAmount);
+                item.setActive(false);
+            }
+        }
     }
 
     private void deleteInventoryUnit(InventoryUnit inventoryUnit){
@@ -252,11 +270,11 @@ public class UserService {
         String username = jwtUser.getUsername();
         User user = findByUsername(username);
         UserInventory userInventory = user.getUserInventory();
-        Long userInventoryId = userInventory.getId();
         UserDelivery userDelivery = userDeliveryRepository.findUserDeliveryById(deliveryId);
         return Optional.of(userDelivery);
 
     }
+
 }
 
  
