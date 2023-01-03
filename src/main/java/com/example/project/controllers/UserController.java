@@ -121,8 +121,12 @@ public class UserController {
     public ResponseEntity arrangeDelivery(@RequestBody DeliveryRequest deliveryRequest,
                                           @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser
                                  ) {
-        userService.arrangeInventoryDelivery(deliveryRequest, jwtUser);
-        return ResponseEntity.ok(new ApiResponse(true, "Доставка оформленна") );
+        if (deliveryRequest.getisPayment() == true) {
+            userService.arrangeInventoryDelivery(deliveryRequest, jwtUser);
+            return ResponseEntity.ok(new ApiResponse(true, "Доставка оформленна"));
+        } else {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "заказ не оплачен"));
+        }
     }
 
     /**
@@ -148,9 +152,5 @@ public class UserController {
 
         return ResponseEntity.ok().body(userService.findDeliveryById(deliveryId, jwtUser));
     }
-
-
-
-
 }
 

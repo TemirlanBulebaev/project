@@ -3,6 +3,7 @@ package com.example.project.services;
 import com.example.project.dto.*;
 import com.example.project.entities.*;
 import com.example.project.event.UserLogoutSuccess;
+import com.example.project.exceptions.InventoryIsEmptyException;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.exceptions.UserLogoutException;
 import com.example.project.payload.DeliveryRequest;
@@ -208,25 +209,27 @@ public class UserService {
      */
     public void arrangeInventoryDelivery(DeliveryRequest deliveryRequest, JwtUser jwtUser) {
         Long inventoryId = jwtUser.getUserInventory().getId();
-        String username = jwtUser.getUsername();
-        User user = findByUsername(username);
-        UserDelivery userDelivery = new UserDelivery();
-        userDelivery.setAddress(deliveryRequest.getAddress());
-        userDelivery.setComment(deliveryRequest.getComment());
-        userDelivery.setPayment(deliveryRequest.getisPayment());
-        userDelivery.setUserInventoryID(user.getUserInventory().getId());
-        userDeliveryRepository.save(userDelivery);
-
         Set<InventoryUnit> inventoryUnits = inventoryUnitRepository.findInventoryUnitsByUserInventoryId(inventoryId);
-        inventoryUnits.stream().forEach(unit -> {
-            DeliveryUnit deliveryUnit = new DeliveryUnit();
-            deliveryUnit.setAmountItems(unit.getAmountItems());
-            deliveryUnit.setItem(unit.getItem());
-            deliveryUnit.setDeliveryID(userDelivery.getId());
-            deliveryUnitRepository.save(deliveryUnit);
-            deleteInventoryUnit(unit);
+        if (!inventoryUnits.isEmpty()) {
+            String username = jwtUser.getUsername();
+            User user = findByUsername(username);
+            UserDelivery userDelivery = new UserDelivery();
+            userDelivery.setAddress(deliveryRequest.getAddress());
+            userDelivery.setComment(deliveryRequest.getComment());
+            userDelivery.setPayment(deliveryRequest.getisPayment());
+            userDelivery.setUserInventoryID(user.getUserInventory().getId());
+            userDeliveryRepository.save(userDelivery);
 
-        });
+
+            inventoryUnits.stream().forEach(unit -> {
+                DeliveryUnit deliveryUnit = new DeliveryUnit();
+                deliveryUnit.setAmountItems(unit.getAmountItems());
+                deliveryUnit.setItem(unit.getItem());
+                deliveryUnit.setDeliveryID(userDelivery.getId());
+                deliveryUnitRepository.save(deliveryUnit);
+                deleteInventoryUnit(unit);
+            });
+        }else throw new InventoryIsEmptyException("Корзина");
     }
 
     private void deleteInventoryUnit(InventoryUnit inventoryUnit){
