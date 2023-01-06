@@ -1,8 +1,5 @@
 package com.example.project.payload;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 public class DeliveryRequest {
 
     private String address;
@@ -27,11 +24,11 @@ public class DeliveryRequest {
         this.address = address;
     }
 
-    public Boolean getisPayment() {
+    public Boolean getIsPayment() {
         return isPayment;
     }
 
-    public void setisPayment(Boolean payment) {
+    public void setIsPayment(Boolean payment) {
         isPayment = payment;
     }
 

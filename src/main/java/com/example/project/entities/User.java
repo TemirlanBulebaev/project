@@ -60,8 +60,7 @@ public class User extends DateAudit {
         this.roles = user.roles;
         this.userInventory = user.userInventory;
     }
-    public User(Long id,
-                String username,
+    public User(String username,
                 String email,
                 String password,
                 Boolean active,
@@ -69,7 +68,6 @@ public class User extends DateAudit {
                 Set<Role> roles,
                 UserInventory userInventory
                ) {
-        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;

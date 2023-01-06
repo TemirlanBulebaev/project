@@ -6,7 +6,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -27,8 +26,7 @@ public class JwtTokenProvider {
 
     public JwtTokenProvider(
             @Value("${jwt.token.secret}") String secret,
-            @Value("${jwt.token.expired}") Long jwtExpiration,
-            UserDetailsService userDetailsService) {
+            @Value("${jwt.token.expired}") Long jwtExpiration) {
         this.secret = secret;
         this.jwtExpiration = jwtExpiration;
     }
@@ -39,7 +37,7 @@ public class JwtTokenProvider {
     public String createToken (JwtUser jwtUser) {
 
         Instant expiryDate = Instant.now().plusMillis(jwtExpiration);
-        String authorities = getUserAuthotities(jwtUser);
+        String authorities = getUserAuthorities(jwtUser);
         return Jwts.builder()
                 .setSubject(Long.toString( jwtUser.getId() ))
                 .setIssuedAt(Date.from(Instant.now()))
@@ -53,7 +51,7 @@ public class JwtTokenProvider {
      * Получение авторизации
      * @param jwtUser
      */
-    private String getUserAuthotities(JwtUser jwtUser) {
+    private String getUserAuthorities(JwtUser jwtUser) {
         return jwtUser.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
     }

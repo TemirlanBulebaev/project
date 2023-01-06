@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Instant;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) //@JsonInclude используется при исключении свойств, имеющих значения null / empty или значения по умолчанию.
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse {
 
     private final String data;

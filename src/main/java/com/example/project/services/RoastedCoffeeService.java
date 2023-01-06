@@ -26,24 +26,6 @@ public class RoastedCoffeeService {
         this.greenCoffeeService = greenCoffeeService;
     }
 
-//    /**
-//     * Добавить жареный кофе на склад
-//     */
-//    public Optional<RoastedCoffee> addRoastCoffee(Long id, String amountBatch) {//TODO Декомпозировать логику
-//        RoastedCoffee newRoastedCoffee  = new RoastedCoffee();//Создать новую позицию жаренного
-//        Long amount = Long.parseLong(amountBatch);//получаем количество батчей
-//
-//        GreenCoffee greenCoffee = greenCoffeeService.findById(id);//находим зеленый кофе
-//
-//        newRoastedCoffee.setName(greenCoffee.getName()); // получаем его имя
-//        Integer waterLoss = greenCoffee.getWaterLoss(); // и потерю влаги
-//        Long rez = (long)((amount*12000*(1-waterLoss*0.01))); // результат ужарки (кофе на выходе)
-//        newRoastedCoffee.setWeight(rez);
-//        greenCoffee.setWeight(greenCoffee.getWeight()-12000); //спишем зеленку
-//        RoastedCoffee savedRoastedCoffee = saveRoastedCoffee(newRoastedCoffee);
-//        logger.info("Произошла обжарка:" + savedRoastedCoffee.getName());
-//        return Optional.of(savedRoastedCoffee);
-//    }
     /**
      * Добавить жареный кофе на склад
      */
@@ -57,18 +39,18 @@ public class RoastedCoffeeService {
         greenCoffee.setWeight(greenCoffee.getWeight()-12000); //спишем зеленку
         Long amount = Long.parseLong(amountBatch);//получаем количество батчей
         Integer waterLoss = greenCoffee.getWaterLoss(); // и потерю влаги
-        Long rezult = (long)((amount*12000*(1-waterLoss*0.01))); // результат ужарки (кофе на выходе)
+        Long result = (long)((amount*12000*(1-waterLoss*0.01))); // результат ужарки (кофе на выходе)
 
         if (roastedCoffeeRepository.existsByName(greenCoffee.getName())) {
             RoastedCoffee existRoastedCoffee = roastedCoffeeRepository.findByName(greenCoffee.getName());
-            existRoastedCoffee.setWeight(existRoastedCoffee.getWeight()+rezult);
+            existRoastedCoffee.setWeight(existRoastedCoffee.getWeight()+result);
             roastedCoffeeRepository.save(existRoastedCoffee);//TODO Перевести в перемернную для сохранения в ретурн
             return Optional.of(existRoastedCoffee);
         } else {
 
             RoastedCoffee newRoastedCoffee = new RoastedCoffee();//Создать новую позицию жаренного
             newRoastedCoffee.setName(greenCoffee.getName()); // получаем его имя
-            newRoastedCoffee.setWeight(rezult);
+            newRoastedCoffee.setWeight(result);
             RoastedCoffee savedRoastedCoffee = saveRoastedCoffee(newRoastedCoffee);
             logger.info("Произошла обжарка:" + savedRoastedCoffee.getName());
             return Optional.of(savedRoastedCoffee);

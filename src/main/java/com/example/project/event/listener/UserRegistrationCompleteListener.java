@@ -45,7 +45,7 @@ public class UserRegistrationCompleteListener implements ApplicationListener<Use
 
         User user = userRegistrationComplete.getUser();
         String token = emailVerificationTokenService.createNewToken();
-        emailVerificationTokenService.createVirficationToken(user, token);
+        emailVerificationTokenService.createVerificationToken(user, token);
 
         String userEmail =  user.getEmail();
         String emailConfirmationUrl =

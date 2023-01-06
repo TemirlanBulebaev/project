@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtAuthenricationEntryPoint implements AuthenticationEntryPoint {
+public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LogManager.getLogger(JwtAuthenricationEntryPoint.class);
+    private static final Logger logger = LogManager.getLogger(JwtAuthenticationEntryPoint.class);
 
     private final HandlerExceptionResolver resolver;
 
     @Autowired
-    public JwtAuthenricationEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+    public JwtAuthenticationEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.resolver = resolver;
     }
 

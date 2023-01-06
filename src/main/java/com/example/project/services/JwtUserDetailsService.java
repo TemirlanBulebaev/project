@@ -1,8 +1,9 @@
-package com.example.project.security;
+package com.example.project.services;
 
 import com.example.project.entities.User;
 import com.example.project.exceptions.ResourceNotFoundException;
 import com.example.project.repositories.UserRepository;
+import com.example.project.security.JwtUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

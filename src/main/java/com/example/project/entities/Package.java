@@ -22,8 +22,7 @@ public class Package{
     public Package() {
     }
 
-    public Package(Long id, PackageType name, Long amount) {
-        this.id = id;
+    public Package(PackageType name, Long amount) {
         this.name = name;
         this.amount = amount;
     }

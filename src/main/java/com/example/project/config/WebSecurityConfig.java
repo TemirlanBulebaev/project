@@ -1,8 +1,8 @@
 package com.example.project.config;
 
-import com.example.project.security.JwtAuthenricationEntryPoint;
+import com.example.project.security.JwtAuthenticationEntryPoint;
 import com.example.project.security.JwtAuthenticationFilter;
-import com.example.project.security.JwtUserDetailsService;
+import com.example.project.services.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +26,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtUserDetailsService jwtUserDetailsService;
-    private final JwtAuthenricationEntryPoint jwtAuthenricationEntryPoint;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
-    public WebSecurityConfig(JwtUserDetailsService jwtUserDetailsService, JwtAuthenricationEntryPoint jwtAuthenricationEntryPoint) {
+    public WebSecurityConfig(JwtUserDetailsService jwtUserDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtUserDetailsService = jwtUserDetailsService;
-        this.jwtAuthenricationEntryPoint = jwtAuthenricationEntryPoint;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Override
@@ -74,15 +74,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic().disable()
                 .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenricationEntryPoint)
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers( // Доступны без авторизации
+                .antMatchers(
                         "/auth/*"
                 ).permitAll()
-                .anyRequest().authenticated(); // остально только для авторизованых
+                .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

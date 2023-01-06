@@ -22,18 +22,13 @@ public class RoastedCoffee{
     public RoastedCoffee() {
     }
 
-    public RoastedCoffee(Long id, String name, Long weight) {
-        this.id = id;
+    public RoastedCoffee(String name, Long weight) {
         this.name = name;
         this.weight = weight;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

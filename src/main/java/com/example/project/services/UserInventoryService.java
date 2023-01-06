@@ -68,7 +68,7 @@ public class UserInventoryService {
     }
 
     /**
-     * Получение инвенторя своего инвенторя в UserInventoryDto c
+     * Получениесвоего инвенторя в UserInventoryDto c
      * Ячейками в InventoryUnitDto с UserItemDto
      */
     public UserInventoryDto getUserInventory(User user) {
@@ -77,7 +77,7 @@ public class UserInventoryService {
 
 
     /**
-     * Изменение ячейки коризины
+     * Изменение ячейки корзины
      */
     @Transactional
     public InventoryUnitDto editUnit(Long unitId, String amountItems) {

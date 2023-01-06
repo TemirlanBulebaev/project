@@ -1,6 +1,5 @@
 package com.example.project.payload;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 

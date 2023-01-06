@@ -11,11 +11,11 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
-    Boolean existsByEmail(String email); // поиск по существующему майлу
+    Boolean existsByEmail(String email);
 
     Optional<User> findByEmail(String email);
 
     Boolean existsByUsername(String username);
 
-    List<User> findByActive (Boolean acttive);
+    List<User> findByActive (Boolean active);
 }

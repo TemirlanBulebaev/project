@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    private static final Logger logger = LogManager.getLogger(UserService.class); //Логер
+    private static final Logger logger = LogManager.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
@@ -63,7 +63,6 @@ public class UserService {
         this.userInventoryService = userInventoryService;
         this.applicationEventPublisher = applicationEventPublisher;
         this.inventoryUnitRepository = inventoryUnitRepository;
-
         this.userDeliveryRepository = userDeliveryRepository;
         this.deliveryUnitRepository = deliveryUnitRepository;
     }
@@ -146,7 +145,7 @@ public class UserService {
             throw new ResourceNotFoundException("User", "active", true);
         }
 
-        return activeUsers.stream() .map(activeUser -> UserDto.fromUser(activeUser))
+        return activeUsers.stream() .map(UserDto::fromUser)
                 .collect(Collectors.toList());
     }
 
@@ -194,7 +193,7 @@ public class UserService {
         saveUser(user);
         logger.info(item.getName() + " добавлен пользователю " + user.getUsername());
         return inventoryUnits.stream()
-                .map(unit -> InventoryUnitDto.fromUser(unit)).collect(Collectors.toSet());
+                .map(InventoryUnitDto::fromUser).collect(Collectors.toSet());
     }
 
     /**
@@ -217,12 +216,12 @@ public class UserService {
             UserDelivery userDelivery = new UserDelivery();
             userDelivery.setAddress(deliveryRequest.getAddress());
             userDelivery.setComment(deliveryRequest.getComment());
-            userDelivery.setPayment(deliveryRequest.getisPayment());
+            userDelivery.setPayment(deliveryRequest.getIsPayment());
             userDelivery.setUserInventoryID(user.getUserInventory().getId());
             userDeliveryRepository.save(userDelivery);
 
 
-            inventoryUnits.stream().forEach(unit -> {
+            inventoryUnits.forEach(unit -> {
                 DeliveryUnit deliveryUnit = new DeliveryUnit();
                 deliveryUnit.setAmountItems(unit.getAmountItems());
                 deliveryUnit.setItem(unit.getItem());
@@ -239,7 +238,7 @@ public class UserService {
 
     private void reduceItem(Item item, String amountItems) {
         Long amount = Long.parseLong(amountItems);
-        Long newAmount = item.getAmount()-amount;
+        long newAmount = item.getAmount()-amount;
         if (newAmount < 0) {
             throw new NotEnoughException("Товара", item.getName(), item );
         } else {
@@ -262,14 +261,12 @@ public class UserService {
         User user = findByUsername(username);
         UserInventory userInventory = user.getUserInventory();
         Long userInventoryId = userInventory.getId();
-        List<UserDelivery> userDelivery = userDeliveryRepository.findAllByUserInventoryID(userInventoryId);
-        return userDelivery;
+        return userDeliveryRepository.findAllByUserInventoryID(userInventoryId);
     }
 
     public Optional<UserDelivery> findDeliveryById(Long deliveryId, JwtUser jwtUser) {
         String username = jwtUser.getUsername();
         User user = findByUsername(username);
-        UserInventory userInventory = user.getUserInventory();
         UserDelivery userDelivery = userDeliveryRepository.findUserDeliveryById(deliveryId);
         return Optional.of(userDelivery);
 

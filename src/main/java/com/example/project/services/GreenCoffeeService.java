@@ -75,7 +75,6 @@ public class GreenCoffeeService {
 
 
     public void deleteGreenCoffee(Long id) {
-        GreenCoffee greenCoffee = findById(id);
         logger.info("Позиция c id " + id + "была удалена");
         greenCoffeeRepository.deleteById(id);
     }

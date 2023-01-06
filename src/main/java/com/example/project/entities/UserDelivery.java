@@ -1,7 +1,6 @@
 package com.example.project.entities;
 
 import com.example.project.entities.audit.DateAudit;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -38,8 +37,11 @@ public class UserDelivery extends DateAudit {
         super();
     }
 
-    public UserDelivery(Long id, String address, String comment, Boolean isPayment, Set<DeliveryUnit> inventoryUnit, Long userInventoryID) {
-        this.id = id;
+    public UserDelivery(String address,
+                        String comment,
+                        Boolean isPayment,
+                        Set<DeliveryUnit> inventoryUnit,
+                        Long userInventoryID) {
         this.address = address;
         this.comment = comment;
         this.isPayment = isPayment;
@@ -50,11 +52,6 @@ public class UserDelivery extends DateAudit {
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getAddress() {
         return address;
     }

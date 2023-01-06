@@ -57,11 +57,11 @@ public class JwtTokenValidator {
             logger.error("JWT claims string is empty.");
             throw new InvalidTokenRequestException("JWT", token, "Illegal argument token");
         }
-        valifateTokenIsNotForALoggedOutDevice(token);
+        validateTokenIsNotForALoggedOutDevice(token);
         return true;
     }
 
-    private void valifateTokenIsNotForALoggedOutDevice(String token) {
+    private void validateTokenIsNotForALoggedOutDevice(String token) {
 
         UserLogoutSuccess previouslyLoggedOutEvent = loggedOutJwtTokenCache.getLogoutEventForToken(token);
         if (previouslyLoggedOutEvent != null) {

@@ -23,7 +23,6 @@ public class UserController {
     private final UserService userService;
     private final UserInventoryService userInventoryService;
 
-
     @Autowired
     public UserController(UserService userService, UserInventoryService userInventoryService) {
         this.userService = userService;
@@ -36,7 +35,7 @@ public class UserController {
      * @param jwtUser
      * @return
      */
-    @GetMapping("/profile") //TODO расширить информацию
+    @GetMapping("/profile") // TODO: расширить информацию
     @PreAuthorize("hasRole('USER')")
     //@ApiOperation(value = "Получение свего профиля." +
             //" В профиле отражена информация о самом пользователе, его балансе $ и баланс внутренних валют.")
@@ -68,7 +67,7 @@ public class UserController {
      * @param jwtUser
      * @return
      */
-    @GetMapping("/all")//готов
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     //@ApiOperation(value = "Получение списка всех пользователей")
     public ResponseEntity getAllUsers (@AuthenticationPrincipal JwtUser jwtUser) {
@@ -121,7 +120,7 @@ public class UserController {
     public ResponseEntity arrangeDelivery(@RequestBody DeliveryRequest deliveryRequest,
                                           @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser
                                  ) {
-        if (deliveryRequest.getisPayment() == true) {
+        if (deliveryRequest.getIsPayment()) {
             userService.arrangeInventoryDelivery(deliveryRequest, jwtUser);
             return ResponseEntity.ok(new ApiResponse(true, "Доставка оформленна"));
         } else {

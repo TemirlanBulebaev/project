@@ -18,22 +18,21 @@ public class GreenCoffee extends DateAudit {
     private String name;
 
     @Column(name = "GREEN_COFFEE_WEIGHT")
-    private Long weight; //g
+    private Long weight;
 
-    @Column(name = "WATER_LOSS")//потеря влаги
-    private Integer waterLoss; //%
+    @Column(name = "WATER_LOSS")
+    private Integer waterLoss;
 
-    @Column(name = "DENSITY") //Плотность
+    @Column(name = "DENSITY")
     private Integer density;
 
-    @Column(name = "HUMIDITY") // Влажность
+    @Column(name = "HUMIDITY")
     private Integer humidity;
 
     public GreenCoffee() {
     }
 
-    public GreenCoffee(Long id, String name, Long weight, Integer waterLoss, Integer density, Integer humidity) {
-        this.id = id;
+    public GreenCoffee(String name, Long weight, Integer waterLoss, Integer density, Integer humidity) {
         this.name = name;
         this.weight = weight;
         this.waterLoss = waterLoss;
@@ -44,11 +43,6 @@ public class GreenCoffee extends DateAudit {
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -87,17 +81,5 @@ public class GreenCoffee extends DateAudit {
 
     public void setHumidity(Integer humidity) {
         this.humidity = humidity;
-    }
-
-    @Override
-    public String toString() {
-        return "GreenCoffee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", weight=" + weight +
-                ", waterLoss=" + waterLoss +
-                ", density=" + density +
-                ", humidity=" + humidity +
-                '}';
     }
 }

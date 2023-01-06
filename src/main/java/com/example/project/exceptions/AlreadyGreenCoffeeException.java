@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class AlreadyGreenCoffeeException extends RuntimeException {
 
     private final String title;
-    private final String fieldName;//имя поля
-    private final transient Object fieldValue;//значение поля
+    private final String fieldName;
+    private final transient Object fieldValue;
 
     public AlreadyGreenCoffeeException(String title, String fieldName, Object fieldValue) {
         super(String.format("%s already in use with %s : '%s'", title, fieldName, fieldValue));

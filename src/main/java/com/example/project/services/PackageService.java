@@ -26,7 +26,7 @@ public class PackageService {
     }
 
     /**
-     * Добавить упакову на склад
+     * Добавить упаковку на склад
      */
     public Object addPackage(PackageRequest packageRequest) { //TODO добавить логи и ошибку о несуществовании
         if (packageRepository.existsByName(packageRequest.getName())){
@@ -74,7 +74,6 @@ public class PackageService {
     }
 
     public void deletePackage(Long id) {
-        Package delPackage = findById(id);
         logger.info("Информация об упаковке " + id + "была удалена");
         packageRepository.deleteById(id);
     }

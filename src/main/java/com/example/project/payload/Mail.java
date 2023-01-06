@@ -2,10 +2,10 @@ package com.example.project.payload;
 
 public class Mail {
 
-    private String from;//от
-    private String to;//к
-    private String subject;// объект
-    private String message;//сообщение
+    private String from;
+    private String to;
+    private String subject;
+    private String message;
 
     public Mail() {
     }

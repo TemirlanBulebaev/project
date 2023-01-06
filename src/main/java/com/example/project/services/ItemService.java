@@ -76,7 +76,7 @@ public class ItemService {
     /**
      * Списание расходников
      */
-    private void reduceConsumables(Item newItem, Long amount){//расходники TODO Возможно декомпозировать
+    private void reduceConsumables(Item newItem, Long amount){// TODO: Возможно декомпозировать
         PackageType packageType = newItem.getPackageType();
         StickerType stickerType = newItem.getStickerType();
         String coffee = newItem.getCoffeeName();
@@ -138,9 +138,7 @@ public class ItemService {
             logger.info("Нет активных Item");
             throw new ResourceNotFoundException("Item", "active", true);
         }
-
-        Set<ItemDto> itemsDto = Item.stream().map( item -> getItemDto(item.getId())).collect(Collectors.toSet());
-        return itemsDto;
+        return Item.stream().map( item -> getItemDto(item.getId())).collect(Collectors.toSet());
     }
 
 
@@ -223,7 +221,11 @@ public class ItemService {
     public Optional<Item> addAmountItem(Long id, String amountItem) {
         Long amount = Long.parseLong(amountItem);
         Item item = itemRepository.findById(id).get();
-        item.setAmount(item.getAmount()+amount);
+        Long newAmount = item.getAmount()+amount;
+        if (newAmount > 0 ) {
+            item.setActive(true);
+        }
+        item.setAmount(newAmount);
         reduceConsumables(item, amount);
         Item editItem = itemRepository.save(item);
         return Optional.of(editItem);

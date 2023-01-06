@@ -47,15 +47,13 @@ public class Item extends DateAudit {
         super();
     }
 
-    public Item(Long id,
-                String name,
+    public Item(String name,
                 String coffeeName,
                 String description,
                 Integer weight,
                 Long price,
                 Long amount,
                 Boolean active) {
-        this.id = id;
         this.name = name;
         this.coffeeName = coffeeName;
         this.description = description;
@@ -71,11 +69,6 @@ public class Item extends DateAudit {
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }

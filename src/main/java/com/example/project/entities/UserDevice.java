@@ -37,14 +37,12 @@ public class UserDevice extends DateAudit {
     public UserDevice() {
     }
 
-    public UserDevice(Long id,
-                      User user,
+    public UserDevice(User user,
                       DeviceType deviceType,
                       String notificationToken,
                       String deviceId,
                       RefreshToken refreshToken,
                       Boolean isRefreshActive) {
-        this.id = id;
         this.user = user;
         this.deviceType = deviceType;
         this.notificationToken = notificationToken;
@@ -55,10 +53,6 @@ public class UserDevice extends DateAudit {
 
     public Long getId() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public User getUser() {
@@ -112,18 +106,4 @@ public class UserDevice extends DateAudit {
     public void setIsRefreshActive(Boolean isRefreshActive) {
         this.isRefreshActive = isRefreshActive;
     }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " id='" + getId() + "'" +
-                ", user='" + getUser() + "'" +
-                ", deviceType='" + getDeviceType() + "'" +
-                ", notificationToken='" + getNotificationToken() + "'" +
-                ", deviceId='" + getDeviceId() + "'" +
-                ", refreshToken='" + getRefreshToken() + "'" +
-                ", isRefreshActive='" + isIsRefreshActive() + "'" +
-                "}";
-    }
-
 }

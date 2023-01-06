@@ -40,8 +40,6 @@ public class AuthService {
             AuthenticationManager authenticationManager,
             UserDeviceService userDeviceService,
             RefreshTokenService refreshTokenService
-
-
             ) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;

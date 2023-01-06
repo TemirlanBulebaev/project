@@ -21,8 +21,7 @@ public class Sticker {
     public Sticker() {
     }
 
-    public Sticker(Long id, StickerType name, Long amount) {
-        this.id = id;
+    public Sticker(StickerType name, Long amount) {
         this.name = name;
         this.amount = amount;
     }
@@ -30,11 +29,6 @@ public class Sticker {
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public StickerType getName() {
         return name;
     }

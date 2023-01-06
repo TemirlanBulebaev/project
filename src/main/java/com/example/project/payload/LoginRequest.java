@@ -6,18 +6,9 @@ import javax.validation.Valid;
 
 public class LoginRequest {
 
-    //@NotBlank(message = "Login Email cannot be blank")
-    //@ApiModelProperty(value = "Email", required = true, allowableValues = "NonEmpty String")
     private String email;
-
-    //@NotNull(message = "Login password cannot be blank")
-    //@ApiModelProperty(value = "Пароль", required = true, allowableValues = "NonEmpty String")
     private String password;
 
-   //@Valid
-   // @NotNull(message = "Device info cannot be null")
-    //@ApiModelProperty(value = "Информация об устройстве", required = true, dataType = "object", allowableValues = "A valid " +
-           // "deviceInfo object")
     @Valid
     private DeviceInfo deviceInfo;
 
@@ -53,15 +44,5 @@ public class LoginRequest {
     public void setDeviceInfo(DeviceInfo deviceInfo) {
         this.deviceInfo = deviceInfo;
     }
-
-    @Override
-    public String toString() {
-        return "{" +
-                ", email='" + getEmail() + "'" +
-                ", password='" + getPassword() + "'" +
-                ", deviceInfo='" + getDeviceInfo() + "'" +
-                "}";
-    }
-
 
 }

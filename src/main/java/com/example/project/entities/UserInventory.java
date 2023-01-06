@@ -29,18 +29,13 @@ public class UserInventory extends DateAudit {
         super();
     }
 
-    public UserInventory(Long id, Set<InventoryUnit> inventoryUnit, User user) {
-        this.id = id;
+    public UserInventory(Set<InventoryUnit> inventoryUnit, User user) {
         this.inventoryUnit = inventoryUnit;
         this.user = user;
     }
 
     public Long getId() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Set<InventoryUnit> getInventoryUnit() {
@@ -57,15 +52,6 @@ public class UserInventory extends DateAudit {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " id='" + getId() + "'" +
-                ", inventoryUnit='" + getInventoryUnit() + "'" +
-                ", user='" + getUser() + "'" +
-                "}";
     }
 
 }

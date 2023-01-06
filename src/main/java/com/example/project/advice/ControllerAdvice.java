@@ -18,7 +18,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = AlreadyUseException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
-    public ApiResponse handleAlredyUseException(AlreadyUseException ex, WebRequest request) {
+    public ApiResponse handleAlreadyUseException(AlreadyUseException ex, WebRequest request) {
         return new ApiResponse(false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));
     }
 
@@ -59,7 +59,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = UserLogoutException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public ApiResponse handleUserLogoutException(UserLogoutException ex, WebRequest request) {
         return new ApiResponse(false, ex.getMessage(), ex.getClass().getName(), resolvePathFromWebRequest(request));

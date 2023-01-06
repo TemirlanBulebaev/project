@@ -18,7 +18,7 @@ public class MailService {
     private String username;
 
     @Value("${jwt.token.password.reset.duration}")
-    private Long expirtion;
+    private Long expiration;
 
     private final JavaMailSender mailSender;
 
@@ -32,9 +32,9 @@ public class MailService {
      */
     public void sendMessageVerification (String emailTo, String emailConfirmationUrl) throws MessagingException {
 
-        Mail mailMessage = new Mail();//Создаем новый майл
-        mailMessage.setFrom(username);//Передаем от кого будет сообщение
-        mailMessage.setTo(emailTo);//кому
+        Mail mailMessage = new Mail();
+        mailMessage.setFrom(username);
+        mailMessage.setTo(emailTo);
         mailMessage.setSubject("Email Verification ");
         mailMessage.setMessage("Добро пожаловать! " + "\n Чтобы завершить регистрацию перейдите по ссылке \n " + "" + emailConfirmationUrl);
         send(mailMessage);

@@ -1,6 +1,5 @@
 package com.example.project.payload;
 
-import com.example.project.entities.PackageType;
 import com.example.project.entities.StickerType;
 
 import javax.validation.constraints.NotBlank;

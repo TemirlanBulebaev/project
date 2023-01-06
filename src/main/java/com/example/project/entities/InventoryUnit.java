@@ -33,11 +33,9 @@ public class InventoryUnit extends DateAudit {
         super();
     }
 
-    public InventoryUnit(Long id,
-                         String amountItems,
+    public InventoryUnit(String amountItems,
                          Item item,
                          UserInventory userInventory) {
-        this.id = id;
         this.amountItems = amountItems;
         this.item = item;
         this.userInventory = userInventory;
@@ -45,10 +43,6 @@ public class InventoryUnit extends DateAudit {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getAmountItems() {

@@ -16,7 +16,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
-@RestController // склад менеджер
+@RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/warehouse")
 public class WarehouseController {
@@ -28,7 +28,10 @@ public class WarehouseController {
     private final StickerService stickerService;
 
     @Autowired
-    public WarehouseController(GreenCoffeeService greenCoffeeService, PackageService packageService, RoastedCoffeeService roastedCoffeeService, StickerService stickerService) {
+    public WarehouseController(GreenCoffeeService greenCoffeeService,
+                               PackageService packageService,
+                               RoastedCoffeeService roastedCoffeeService,
+                               StickerService stickerService) {
         this.greenCoffeeService = greenCoffeeService;
         this.packageService = packageService;
         this.roastedCoffeeService = roastedCoffeeService;
@@ -38,7 +41,7 @@ public class WarehouseController {
     /**
      * Добавить позицию зеленого кофе
      */
-    @PostMapping("/addGreen")//готов
+    @PostMapping("/addGreen")
     public ResponseEntity addGreenCoffee(@Valid @RequestBody GreenCoffeeRequest greenCoffeeRequest) {
         return ResponseEntity.ok().body(greenCoffeeService.addGreenCoffee(greenCoffeeRequest));
     }
@@ -46,7 +49,7 @@ public class WarehouseController {
     /**
      * Получение позции по id
      */
-    @GetMapping("/green/{id}")//готов
+    @GetMapping("/green/{id}")
     public ResponseEntity getGreenCoffee(@PathVariable(value = "id") Long id,
                                   @AuthenticationPrincipal JwtUser jwtUser) {
 
@@ -56,7 +59,7 @@ public class WarehouseController {
     /**
      * Получение всех позиций зеленого кофе
      */
-    @GetMapping("/green/all") //Готов
+    @GetMapping("/green/all")
     public ResponseEntity getGreenCoffees(@AuthenticationPrincipal JwtUser jwtUser) {
 
         return ResponseEntity.ok().body(greenCoffeeService.getGreenCoffees());
@@ -94,7 +97,7 @@ public class WarehouseController {
     }
 
     /**
-     * Посмотреть остатки жаренного кофе на складе
+     * Посмотреть остатки жареного кофе на складе
      */
     @GetMapping("/roasted/all")
     public ResponseEntity getRoastedCoffee(@ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {

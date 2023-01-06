@@ -11,7 +11,6 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.Instant;
 
-// позволяет вынести общие поля в родительский класс, но при этом не создавать для него отдельную таблицу
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"create", "update"}, allowGetters = true)

@@ -74,7 +74,6 @@ public class StickerService {
     }
 
     public void deleteSticker(Long id) {
-        Sticker delSticker = findById(id);
         logger.info("Информация о наклейке " + id + "была удалена");
         stickerRepository.deleteById(id);
     }

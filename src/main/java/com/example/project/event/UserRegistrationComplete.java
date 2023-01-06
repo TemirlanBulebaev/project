@@ -4,10 +4,7 @@ import com.example.project.entities.User;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.web.util.UriComponentsBuilder;
 
-//Регистрация пользователя завершена
-public class UserRegistrationComplete extends ApplicationEvent {//ApplicationEvent - Публикация событий
-
-    //Поля, помеченные ключевым словом transient, не сериализуются.
+public class UserRegistrationComplete extends ApplicationEvent {
     private transient UriComponentsBuilder redirectUrl;
     private User user;
 

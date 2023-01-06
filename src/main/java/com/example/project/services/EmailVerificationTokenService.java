@@ -32,7 +32,7 @@ public class EmailVerificationTokenService {
     /**
      * Создание токена для подтверждения эл.почты
      */
-    public void createVirficationToken(User user, String token) {
+    public void createVerificationToken(User user, String token) {
         EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
         emailVerificationToken.setToken(token);
         emailVerificationToken.setTokenStatus(TokenStatus.STATUS_PENDING);

@@ -39,10 +39,6 @@ public class Role  {
         return this.id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public RoleName getRole() {
         return this.role;
     }
@@ -57,15 +53,6 @@ public class Role  {
 
     public void setUsers(Set<User> users) {
         this.users = users;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " id='" + getId() + "'" +
-                ", role='" + getRole() + "'" +
-                ", users='" + getUsers() + "'" +
-                "}";
     }
 
 }

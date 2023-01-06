@@ -12,7 +12,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:mail.properties")
-@EnableAsync // ? - доделать
+@EnableAsync
 public class  MailConfig {
 
     @Value("${spring.mail.default-encoding}")
