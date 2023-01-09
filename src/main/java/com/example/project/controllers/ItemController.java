@@ -6,6 +6,8 @@ import com.example.project.payload.EditItemRequest;
 import com.example.project.payload.ItemRequest;
 import com.example.project.security.JwtUser;
 import com.example.project.services.ItemService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/item")
-//@Api(value = "Item Rest API", description = "Товар, который можно приобрести за внутреннюю валюту")
+@Api(value = "Item Rest API", description = "Товар, который можно приобрести за внутреннюю валюту")
 public class ItemController {
 
     private final ItemService itemService;
@@ -33,7 +35,7 @@ public class ItemController {
      */
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    //@ApiOperation(value = "Добавление Item")
+    @ApiOperation(value = "Добавление Item")
     public ResponseEntity addItem(@Valid @RequestBody ItemRequest itemRequest) {
         return ResponseEntity.ok().body(itemService.addItem(itemRequest));
     }
@@ -43,6 +45,7 @@ public class ItemController {
      */
     @PostMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "Добавление количества Item по id")
     public ResponseEntity addAmountItem(@PathVariable(value = "id") Long id,
                                         @RequestParam String amountItem,
                                         @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
@@ -54,8 +57,8 @@ public class ItemController {
      */
     @GetMapping("/all")
     @PreAuthorize("hasRole('USER')")
-    //@ApiOperation(value = "Получение Items. Формат ответа зависит от роли")
-    public ResponseEntity getItems(Pageable pageable,
+    @ApiOperation(value = "Получение Items. Формат ответа зависит от роли")
+    public ResponseEntity getItems(@ApiIgnore Pageable pageable,
                                    @AuthenticationPrincipal JwtUser jwtUser) {
 
         return ResponseEntity.ok().body(itemService.getItems(pageable, jwtUser));
@@ -65,7 +68,7 @@ public class ItemController {
      */
     @PostMapping("/{id}/buy")
     @PreAuthorize("hasRole('USER')")
-    //@ApiOperation(value = "Покупка Item за внутреннюю валюту")
+    @ApiOperation(value = "Добавление Item в инвентарь (корзину)")
     public ResponseEntity buyItem(@PathVariable(value = "id") Long itemId,
                                   @RequestParam String amountItem,
                                   @ApiIgnore @AuthenticationPrincipal JwtUser jwtUser) {
@@ -80,7 +83,7 @@ public class ItemController {
      */
     @DeleteMapping("/{id}/delete")
     @PreAuthorize("hasRole('ADMIN')")
-    //@ApiOperation(value = "Получение Items. Формат ответа зависить от роли")
+    @ApiOperation(value = "Убрать отображение товара для пользователя")
     public ResponseEntity deleteItem(@PathVariable(value = "id") Long id,
                                      @AuthenticationPrincipal JwtUser jwtUser) {
         itemService.deleteItem(id);
@@ -93,7 +96,7 @@ public class ItemController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
-    //@ApiOperation(value = "Получение Item. Формат ответа зависить от роли")
+    @ApiOperation(value = "Получение Item по id. Формат ответа зависить от роли")
     public ResponseEntity getItem(@PathVariable(value = "id") Long id,
                                       @AuthenticationPrincipal JwtUser jwtUser) {
 
@@ -105,7 +108,7 @@ public class ItemController {
      */
     @PutMapping("/{id}/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    //@ApiOperation(value = "Изменение Item (без цен)")
+    @ApiOperation(value = "Изменение информации об Item ")
     public ResponseEntity editItem(@PathVariable(value = "id") Long id,
                                    @Valid @RequestBody EditItemRequest editItemRequest) {
 

@@ -13,6 +13,9 @@ import com.example.project.payload.RegistrationRequest;
 import com.example.project.security.JwtTokenProvider;
 import com.example.project.security.JwtUser;
 import com.example.project.services.AuthService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@Api(value = "Authorization", description = "Авторизация пользователей")
 public class AuthController {
     private static final Logger logger = LogManager.getLogger(AuthController.class);
     private final AuthService authService;
@@ -51,7 +55,9 @@ public class AuthController {
      * registerAsAdmin": "true" - зарегистрировать администратором
      */
         @PostMapping("/registration")
-    public ResponseEntity registrationUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
+        @ApiOperation(value = "Регистрация пользователя")
+    public ResponseEntity registrationUser(
+                @ApiParam(value = "RegistrationRequest") @Valid @RequestBody RegistrationRequest registrationRequest) {
             return authService.registrationUser(registrationRequest)
                         .map(savedNewUser -> {
                             UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder
@@ -69,7 +75,9 @@ public class AuthController {
      * Подтверждение учетной записи
      */
     @GetMapping("/registrationConfirmation")
-    public ResponseEntity confirmRegistration(@RequestParam("token") String token) {
+    @ApiOperation(value = "Подтверждение учетной записи")
+    public ResponseEntity confirmRegistration(
+            @ApiParam(value = "token") @RequestParam("token") String token) {
 
         return authService.confirmEmailRegistration(token)
                 .map(user -> ResponseEntity.ok(new ApiResponse(true, "Учётная запись подтверждена")))
@@ -81,6 +89,7 @@ public class AuthController {
      * Вход по почте, паролю и устройству
      */
     @PostMapping("/login")
+    @ApiOperation(value = "Логин по почте, паролю и устройству")
     public ResponseEntity login (@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authService.authenticateUser(loginRequest)
                 .orElseThrow(() -> new UserLoginException("аутентификации", loginRequest.getEmail()));

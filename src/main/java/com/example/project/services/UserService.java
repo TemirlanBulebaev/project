@@ -264,11 +264,8 @@ public class UserService {
         return userDeliveryRepository.findAllByUserInventoryID(userInventoryId);
     }
 
-    public Optional<UserDelivery> findDeliveryById(Long deliveryId, JwtUser jwtUser) {
-        String username = jwtUser.getUsername();
-        User user = findByUsername(username);
-        UserDelivery userDelivery = userDeliveryRepository.findUserDeliveryById(deliveryId);
-        return Optional.of(userDelivery);
+    public UserDelivery findDeliveryById(Long deliveryId) {
+        return userDeliveryRepository.findUserDeliveryById(deliveryId);
 
     }
 
