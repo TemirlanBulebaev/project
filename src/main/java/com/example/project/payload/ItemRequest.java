@@ -1,5 +1,7 @@
 package com.example.project.payload;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -8,7 +10,7 @@ public class ItemRequest {
 
     @NotNull(message = "Item name cannot be null")
     @NotBlank(message = "Item name cannot be blank")
-    //@ApiModelProperty(value = "Название Item", required = true, allowableValues = "NonEmpty String")
+    @ApiModelProperty(value = "Название Item", required = true, allowableValues = "NonEmpty String")
     private String name;
 
     @NotNull(message = "Item name cannot be null")
